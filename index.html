@@ -1,0 +1,1285 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#f7faf4" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f2018" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manjari:wght@400;700&family=Noto+Serif+Malayalam:wght@500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <title>ANS Foods — Millet Kanji Mixes</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --paper: #f7faf4;
+      --paper-2: #ffffff;
+      --ink: #183326;
+      --muted: #53685b;
+      --line: #d5ded2;
+      --forest: #356f46;
+      --forest-deep: #174d31;
+      --sage: #e1ebda;
+      --gold: #c78b31;
+      --terracotta: #a65338;
+      --maroon: #74362f;
+      --plum: #70448a;
+      --green: #63a348;
+      --white: #ffffff;
+      --on-green: #fffdf7;
+      --shadow: 0 24px 70px rgba(34, 77, 47, .13);
+      --sans: "DM Sans", sans-serif;
+      --serif: "Playfair Display", Georgia, serif;
+      --mal: "Manjari", sans-serif;
+      --mal-display: "Noto Serif Malayalam", serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --paper: #0f2018;
+        --paper-2: #172b21;
+        --ink: #f4f6ef;
+        --muted: #bdcabc;
+        --line: #355343;
+        --forest: #83b67c;
+        --forest-deep: #2f754b;
+        --sage: #213d2b;
+        --gold: #dfaa51;
+        --terracotta: #d98a64;
+        --maroon: #69332f;
+        --white: #ffffff;
+        --on-green: #fffdf7;
+        --shadow: 0 24px 70px rgba(0, 0, 0, .3);
+      }
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.55;
+      overflow-x: hidden;
+    }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; }
+    img { max-width: 100%; display: block; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+    .utility {
+      min-height: 52px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      max-width: 1240px;
+      padding: 0 28px;
+      margin: 0 auto;
+    }
+    .origin {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .origin::before {
+      content: "";
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--green) 16%, transparent);
+    }
+    .utility-actions { display: flex; align-items: center; gap: 9px; }
+    .lang-switch {
+      display: inline-flex;
+      padding: 3px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper-2);
+    }
+    .lang-btn {
+      border: 0;
+      color: var(--muted);
+      background: transparent;
+      padding: 7px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .lang-btn[aria-pressed="true"] { background: var(--forest-deep); color: var(--on-green); }
+    .cart-trigger {
+      position: relative;
+      display: inline-grid;
+      place-items: center;
+      width: 38px; height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: var(--paper-2);
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .cart-trigger svg { width: 18px; }
+    .cart-count {
+      position: absolute; top: -5px; right: -4px;
+      min-width: 19px; height: 19px;
+      padding: 0 5px;
+      border-radius: 10px;
+      background: var(--forest);
+      color: var(--paper-2);
+      border: 2px solid var(--paper);
+      display: grid;
+      place-items: center;
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .hero {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: clamp(52px, 8vw, 110px) 28px 72px;
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      align-items: center;
+      gap: clamp(40px, 7vw, 96px);
+    }
+    .eyebrow {
+      color: var(--forest);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin: 0 0 22px;
+    }
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(50px, 6.8vw, 92px);
+      line-height: .96;
+      letter-spacing: -.045em;
+      max-width: 760px;
+      margin: 0;
+      text-wrap: balance;
+    }
+    .hero-copy > p:not(.eyebrow) {
+      font-size: clamp(17px, 2vw, 21px);
+      color: var(--muted);
+      max-width: 600px;
+      margin: 28px 0 34px;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+    .primary-btn, .secondary-btn, .add-btn, .checkout-btn {
+      border: 0;
+      border-radius: 5px;
+      min-height: 50px;
+      padding: 0 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform .18s ease, background .18s ease;
+    }
+    .primary-btn, .add-btn, .checkout-btn { background: var(--forest-deep); color: var(--on-green); }
+    .secondary-btn { color: var(--ink); border: 1px solid var(--line); background: transparent; }
+    .primary-btn:hover, .secondary-btn:hover, .add-btn:hover, .checkout-btn:hover { transform: translateY(-2px); }
+    .hero-note { font-size: 12px; color: var(--muted); }
+    .hero-visual { position: relative; min-height: 520px; }
+    .hero-photo {
+      position: absolute;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      background: var(--paper-2);
+    }
+    .hero-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .hero-photo.main { inset: 0 8% 0 16%; border-radius: 46% 46% 14px 14px; }
+    .hero-photo.main img { object-position: center 40%; }
+    .hero-photo.side {
+      width: 35%; height: 48%;
+      left: -1%; bottom: -18px;
+      border-radius: 8px;
+      transform: rotate(-4deg);
+      border: 8px solid var(--paper);
+    }
+    .stamp {
+      position: absolute;
+      right: 0; top: 10%;
+      width: 116px; aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--forest-deep);
+      color: var(--on-green);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      line-height: 1.25;
+      transform: rotate(6deg);
+      box-shadow: 0 12px 30px rgba(16, 49, 36, .22);
+    }
+    .proof {
+      background: var(--forest-deep);
+      color: var(--on-green);
+      border-top: 5px solid var(--gold);
+    }
+    .proof-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 24px 28px;
+    }
+    .proof-item { padding: 8px 24px; border-right: 1px solid color-mix(in srgb, var(--paper-2) 25%, transparent); }
+    .proof-item:first-child { padding-left: 0; }
+    .proof-item:last-child { border-right: 0; }
+    .proof-item strong { display: block; font-family: var(--serif); font-size: 18px; }
+    .proof-item span { font-size: 12px; opacity: .76; }
+    .products {
+      max-width: 1240px;
+      padding: 108px 28px 120px;
+      margin: 0 auto;
+    }
+    .section-head {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: end;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+    .section-head h2 {
+      font-family: var(--serif);
+      font-size: clamp(38px, 5vw, 62px);
+      line-height: 1.03;
+      letter-spacing: -.035em;
+      margin: 0;
+    }
+    .section-head p { color: var(--muted); margin: 0; max-width: 530px; }
+    .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .product-card {
+      background: var(--paper-2);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .product-image {
+      display: block;
+      aspect-ratio: 4/5;
+      overflow: hidden;
+      background: #efede8;
+      position: relative;
+    }
+    .product-image-link {
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      text-align: inherit;
+    }
+    .product-image-link:focus-visible,
+    .product-title-link:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+    .product-title-link {
+      display: inline;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      text-align: inherit;
+      font: inherit;
+    }
+    .product-title-link:hover { color: var(--forest-deep); text-decoration: underline; text-underline-offset: 4px; }
+    .product-image::after {
+      content: "900 g";
+      position: absolute;
+      right: 14px; bottom: 14px;
+      background: rgba(255,253,248,.9);
+      color: #25291f;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      backdrop-filter: blur(8px);
+    }
+    .product-image img { width: 100%; height: 100%; object-fit: cover; object-position: center 45%; transition: transform .5s ease; }
+    .product-card:hover .product-image img { transform: scale(1.025); }
+    .product-body { display: flex; flex-direction: column; flex: 1; padding: 24px; }
+    .product-kicker { font-size: 12px; font-weight: 700; color: var(--muted); margin: 0 0 6px; }
+    .product-title { font-size: 23px; line-height: 1.2; margin: 0; }
+    .product-ml { font-family: var(--mal); font-size: 14px; color: var(--muted); margin: 5px 0 18px; }
+    .product-copy { font-size: 14px; color: var(--muted); margin: 0 0 26px; }
+    .product-bottom { margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 14px; }
+    .product-actions { display: flex; align-items: center; gap: 8px; }
+    .price { display: flex; flex-direction: column; }
+    .benefits {
+      background: var(--maroon);
+      color: var(--on-green);
+      padding: 100px 28px;
+      border-top: 6px solid var(--gold);
+    }
+    .benefits-inner { max-width: 1184px; margin: 0 auto; }
+    .benefits-head {
+      display: grid;
+      grid-template-columns: .85fr 1.15fr;
+      gap: clamp(34px, 7vw, 90px);
+      align-items: end;
+      margin-bottom: 42px;
+    }
+    .benefits-head h2 {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(38px, 5vw, 60px);
+      line-height: 1.03;
+    }
+    .benefits-head p { margin: 0; color: color-mix(in srgb, var(--on-green) 78%, transparent); max-width: 590px; }
+    .benefit-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      border-top: 1px solid color-mix(in srgb, var(--on-green) 28%, transparent);
+    }
+    .benefit-item {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 15px;
+      padding: 25px 24px 25px 0;
+      border-bottom: 1px solid color-mix(in srgb, var(--on-green) 24%, transparent);
+    }
+    .benefit-item:nth-child(even) { padding-left: 28px; border-left: 1px solid color-mix(in srgb, var(--on-green) 24%, transparent); }
+    .benefit-number {
+      font-family: var(--serif);
+      color: var(--gold);
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+    .benefit-item h3 { margin: 0 0 6px; font-size: 17px; }
+    .benefit-item p { margin: 0; color: color-mix(in srgb, var(--on-green) 76%, transparent); font-size: 14px; }
+    .detail-benefits { margin: 4px 0 34px; }
+    .detail-benefits h3 { font-family: var(--serif); font-size: 25px; margin: 0 0 12px; }
+    .detail-benefit-list { border-top: 1px solid var(--line); }
+    .detail-benefit {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 12px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .detail-benefit span:first-child { color: var(--terracotta); font-weight: 700; }
+    .detail-benefit strong { display: block; font-size: 14px; margin-bottom: 2px; }
+    .detail-benefit small { display: block; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .price strong { font-family: var(--serif); font-size: 27px; line-height: 1; }
+    .price span { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .add-btn { min-height: 44px; padding: 0 15px; white-space: nowrap; }
+    .add-btn.is-added { background: var(--sage); color: var(--forest-deep); }
+    .story {
+      background: var(--sage);
+      padding: 104px 28px;
+    }
+    .story-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: .8fr 1.2fr;
+      gap: clamp(50px, 9vw, 130px);
+      align-items: start;
+    }
+    .story h2 { font-family: var(--serif); font-size: clamp(38px, 5vw, 58px); line-height: 1.05; margin: 0; }
+    .story-copy { border-top: 1px solid color-mix(in srgb, var(--ink) 30%, transparent); }
+    .story-row {
+      display: grid;
+      grid-template-columns: 54px 1fr;
+      gap: 20px;
+      padding: 24px 0;
+      border-bottom: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
+    }
+    .story-row span { font-family: var(--serif); font-size: 22px; color: var(--forest); }
+    .story-row h3 { margin: 0 0 7px; font-size: 18px; }
+    .story-row p { margin: 0; color: var(--muted); font-size: 14px; }
+    .order-note {
+      max-width: 1240px;
+      padding: 84px 28px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 30px;
+      align-items: center;
+    }
+    .order-note h2 { font-family: var(--serif); font-size: clamp(32px, 4vw, 48px); margin: 0 0 10px; }
+    .order-note p { margin: 0; color: var(--muted); max-width: 680px; }
+    footer { border-top: 1px solid var(--line); }
+    .footer-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 28px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .footer-licence { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+    .overlay {
+      position: fixed; inset: 0; z-index: 50;
+      background: rgba(8, 13, 9, .48);
+      opacity: 0; visibility: hidden;
+    }
+    .overlay.open { opacity: 1; visibility: visible; }
+    .cart-drawer {
+      position: absolute; right: 0; top: 0; bottom: 0;
+      width: min(430px, 100%);
+      background: var(--paper-2);
+      box-shadow: -20px 0 60px rgba(0,0,0,.2);
+      transform: translateX(100%);
+      display: flex;
+      flex-direction: column;
+    }
+    .overlay.open .cart-drawer { transform: translateX(0); }
+    .cart-head { padding: 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); }
+    .cart-head h2 { margin: 0; font-family: var(--serif); font-size: 30px; }
+    .close-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; font-size: 23px; }
+    .cart-items { flex: 1; overflow-y: auto; padding: 8px 24px; }
+    .empty { text-align: center; color: var(--muted); padding: 80px 20px; }
+    .cart-item { display: grid; grid-template-columns: 62px 1fr auto; gap: 13px; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--line); }
+    .cart-thumb { width: 62px; height: 72px; object-fit: cover; border-radius: 5px; }
+    .cart-item h3 { margin: 0 0 3px; font-size: 14px; }
+    .cart-item p { margin: 0; color: var(--muted); font-size: 12px; }
+    .qty { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 5px; margin-top: 8px; }
+    .qty button { width: 30px; height: 28px; border: 0; background: transparent; color: var(--ink); cursor: pointer; }
+    .qty span { min-width: 24px; text-align: center; font-size: 12px; }
+    .remove-btn { border: 0; background: transparent; color: var(--muted); text-decoration: underline; cursor: pointer; font-size: 11px; padding: 0; }
+    .cart-foot { border-top: 1px solid var(--line); padding: 22px 24px calc(22px + env(safe-area-inset-bottom)); }
+    .total-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+    .total-row strong { font-family: var(--serif); font-size: 28px; }
+    .delivery-copy { font-size: 12px; color: var(--muted); margin: 0 0 16px; }
+    .checkout-btn { width: 100%; min-height: 54px; }
+    .detail-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      background: var(--paper);
+      overflow-y: auto;
+      display: none;
+    }
+    .detail-overlay.open { display: block; }
+    .detail-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      min-height: 64px;
+      padding: 10px max(18px, calc((100vw - 1184px) / 2));
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--paper) 94%, transparent);
+      backdrop-filter: blur(12px);
+    }
+    .detail-back {
+      border: 0;
+      background: transparent;
+      color: var(--forest-deep);
+      font-weight: 700;
+      cursor: pointer;
+      padding: 10px 0;
+    }
+    .detail-close {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: var(--paper-2);
+      color: var(--ink);
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .detail-main {
+      max-width: 1184px;
+      margin: 0 auto;
+      padding: clamp(34px, 6vw, 82px) 28px 76px;
+      display: grid;
+      grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+      gap: clamp(36px, 7vw, 92px);
+      align-items: start;
+    }
+    .detail-image-wrap {
+      position: sticky;
+      top: 96px;
+      background: var(--paper-2);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .detail-image { width: 100%; aspect-ratio: 4/5; object-fit: cover; }
+    .detail-copy { padding-top: 10px; }
+    .detail-copy .eyebrow { margin-bottom: 14px; }
+    .detail-title {
+      font-family: var(--serif);
+      font-size: clamp(40px, 5vw, 66px);
+      line-height: 1.02;
+      letter-spacing: -.035em;
+      margin: 0;
+    }
+    .detail-local { color: var(--forest); font-weight: 700; margin: 12px 0 22px; }
+    .detail-description { color: var(--muted); font-size: 18px; max-width: 620px; margin: 0 0 30px; }
+    .detail-facts {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      margin: 0 0 30px;
+    }
+    .detail-fact { padding: 18px 18px 18px 0; }
+    .detail-fact:nth-child(even) { padding-left: 18px; border-left: 1px solid var(--line); }
+    .detail-fact:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+    .detail-fact strong { display: block; font-size: 14px; margin-bottom: 3px; }
+    .detail-fact span { color: var(--muted); font-size: 12px; }
+    .detail-buy { display: flex; align-items: center; gap: 20px; }
+    .detail-price strong { display: block; font-family: var(--serif); font-size: 36px; line-height: 1; }
+    .detail-price span { color: var(--muted); font-size: 12px; }
+    .detail-add { min-width: 190px; }
+    .checkout-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 65;
+      background: var(--paper);
+      overflow-y: auto;
+      display: none;
+    }
+    .checkout-overlay.open { display: block; }
+    .checkout-main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: clamp(32px, 5vw, 68px) 28px 80px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr);
+      gap: clamp(32px, 6vw, 72px);
+      align-items: start;
+    }
+    .checkout-main h2 { font-family: var(--serif); font-size: clamp(36px, 5vw, 56px); line-height: 1.05; margin: 0 0 10px; }
+    .checkout-intro { color: var(--muted); margin: 0 0 30px; }
+    .checkout-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .field { display: grid; gap: 7px; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { font-size: 13px; font-weight: 700; }
+    .field input, .field textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--paper-2);
+      color: var(--ink);
+      padding: 13px 14px;
+      font: inherit;
+    }
+    .field textarea { min-height: 96px; resize: vertical; }
+    .payment-panel {
+      grid-column: 1 / -1;
+      margin-top: 10px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper-2);
+    }
+    .payment-panel h3 { margin: 0 0 6px; font-size: 17px; }
+    .payment-panel p { margin: 0; color: var(--muted); font-size: 13px; }
+    .confirm-order-btn {
+      width: 100%;
+      min-height: 54px;
+      margin-top: 16px;
+      border: 0;
+      border-radius: 5px;
+      background: var(--forest-deep);
+      color: var(--on-green);
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .confirm-order-btn:hover { background: var(--forest); }
+    .checkout-summary {
+      position: sticky;
+      top: 94px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--paper-2);
+    }
+    .checkout-summary h3 { font-family: var(--serif); font-size: 25px; margin: 0 0 18px; }
+    .summary-item { display: flex; justify-content: space-between; gap: 18px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+    .summary-total { display: flex; justify-content: space-between; align-items: baseline; padding-top: 18px; }
+    .summary-total strong { font-family: var(--serif); font-size: 28px; }
+    .after-payment { margin: 18px 0 0; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+    .confirmation-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 75;
+      display: none;
+      overflow-y: auto;
+      background: var(--paper);
+    }
+    .confirmation-overlay.open { display: grid; place-items: center; }
+    .confirmation-card {
+      width: min(680px, calc(100% - 36px));
+      margin: 36px auto;
+      padding: clamp(30px, 6vw, 58px);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper-2);
+      box-shadow: var(--shadow);
+    }
+    .confirmation-mark {
+      width: 54px;
+      height: 54px;
+      margin-bottom: 24px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--sage);
+      color: var(--forest-deep);
+      font-size: 26px;
+      font-weight: 700;
+    }
+    .confirmation-card h2 {
+      margin: 0 0 12px;
+      font-family: var(--serif);
+      font-size: clamp(36px, 6vw, 54px);
+      line-height: 1.05;
+    }
+    .confirmation-lead { margin: 0 0 26px; color: var(--muted); }
+    .confirmation-summary {
+      margin-bottom: 26px;
+      border-top: 1px solid var(--line);
+    }
+    .confirmation-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 18px 0 0;
+      font-weight: 700;
+    }
+    .confirmation-total strong { font-family: var(--serif); font-size: 30px; }
+    .whatsapp-btn {
+      width: 100%;
+      min-height: 56px;
+      border-radius: 5px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: #167a3f;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .whatsapp-btn:hover { background: #0f6633; }
+    .confirmation-note { margin: 12px 0 0; color: var(--muted); font-size: 12px; text-align: center; }
+    .confirmation-actions { margin-top: 22px; display: flex; justify-content: center; gap: 18px; }
+    .text-btn { border: 0; background: transparent; color: var(--forest-deep); font-weight: 700; cursor: pointer; padding: 8px; }
+    body.ml .confirmation-card h2 { font-family: var(--mal-display); letter-spacing: -.02em; }
+    .toast {
+      position: fixed; left: 50%; bottom: 24px; z-index: 70;
+      transform: translate(-50%, 20px);
+      background: var(--ink); color: var(--paper-2);
+      padding: 11px 16px;
+      border-radius: 5px;
+      font-size: 13px;
+      opacity: 0; pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    [data-ml] { display: none !important; }
+    body.ml [data-en] { display: none !important; }
+    body.ml [data-ml] { display: revert !important; }
+    body.ml .proof-item strong[data-ml] { display: block !important; }
+    body.ml { font-family: var(--mal); }
+    body.ml h1, body.ml .section-head h2, body.ml .benefits h2, body.ml .story h2, body.ml .order-note h2, body.ml .cart-head h2, body.ml .detail-title, body.ml .detail-benefits h3 { font-family: var(--mal-display); letter-spacing: -.02em; }
+    body.ml h1 { line-height: 1.14; font-size: clamp(42px, 6vw, 76px); }
+    body.ml .product-title, body.ml .benefit-item h3, body.ml .story-row h3, body.ml .detail-local { font-family: var(--mal-display); }
+    @media (max-width: 840px) {
+      .hero { grid-template-columns: 1fr; padding-top: 48px; }
+      .hero-visual { min-height: 480px; max-width: 560px; width: 100%; margin: 0 auto; }
+      .proof-inner { grid-template-columns: 1fr 1fr; gap: 0; }
+      .proof-item { border-bottom: 1px solid color-mix(in srgb, var(--paper-2) 25%, transparent); }
+      .proof-item:nth-child(2) { border-right: 0; }
+      .proof-item:nth-child(3), .proof-item:nth-child(4) { border-bottom: 0; }
+      .product-grid { grid-template-columns: 1fr 1fr; }
+      .product-card:last-child { grid-column: 1 / -1; max-width: calc(50% - 11px); }
+      .benefits-head { grid-template-columns: 1fr; }
+      .story-inner { grid-template-columns: 1fr; }
+      .detail-main { grid-template-columns: 1fr; }
+      .detail-image-wrap { position: relative; top: auto; max-width: 560px; width: 100%; margin: 0 auto; }
+      .checkout-main { grid-template-columns: 1fr; }
+      .checkout-summary { position: static; }
+    }
+    @media (max-width: 620px) {
+      .utility { padding: 0 18px; }
+      .origin span:last-child { display: none; }
+      .hero { padding: 44px 18px 54px; gap: 44px; }
+      h1 { font-size: clamp(44px, 15vw, 66px); }
+      .hero-copy > p:not(.eyebrow) { font-size: 17px; margin: 22px 0 28px; }
+      .hero-actions { align-items: stretch; flex-direction: column; }
+      .hero-note { text-align: center; }
+      .hero-visual { min-height: 400px; }
+      .hero-photo.main { inset: 0 4% 0 10%; }
+      .hero-photo.side { width: 36%; height: 45%; left: -2%; }
+      .stamp { width: 94px; font-size: 10px; right: -3px; top: 6%; }
+      .proof-inner { padding: 18px; }
+      .proof-item { padding: 13px 10px; }
+      .proof-item strong { font-size: 15px; }
+      .proof-item span { font-size: 10px; }
+      .section-head { grid-template-columns: 1fr; gap: 18px; }
+      .products { padding: 78px 18px 84px; }
+      .product-grid { grid-template-columns: 1fr; gap: 18px; }
+      .product-card:last-child { grid-column: auto; max-width: none; }
+      .product-image { aspect-ratio: 5/5.8; }
+      .product-bottom { align-items: stretch; flex-direction: column; }
+      .product-actions { display: block; }
+      .add-btn { width: 100%; }
+      .benefits { padding: 74px 18px; }
+      .benefit-list { grid-template-columns: 1fr; }
+      .benefit-item, .benefit-item:nth-child(even) { padding: 20px 0; border-left: 0; }
+      .detail-main { padding: 24px 18px 56px; gap: 28px; }
+      .detail-copy { padding-top: 0; }
+      .detail-title { font-size: 39px; }
+      .detail-description { font-size: 16px; }
+      .detail-buy { align-items: stretch; flex-direction: column; }
+      .detail-add { width: 100%; }
+      .checkout-main { padding: 24px 18px 56px; }
+      .checkout-form { grid-template-columns: 1fr; }
+      .field.full, .payment-panel { grid-column: auto; }
+      .story { padding: 76px 18px; }
+      .story-inner { gap: 38px; }
+      .order-note { padding: 68px 18px; grid-template-columns: 1fr; }
+      .order-note .primary-btn { width: 100%; }
+      .footer-inner { padding: 24px 18px; align-items: flex-start; flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="utility" aria-label="Store controls">
+    <div class="origin"><span data-en>Made in Kerala</span><span data-ml lang="ml">കേരളത്തിൽ നിർമ്മിച്ചത്</span></div>
+    <div class="utility-actions">
+      <div class="lang-switch" aria-label="Language">
+        <button class="lang-btn" type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button class="lang-btn" type="button" data-lang="ml" aria-pressed="false">മലയാളം</button>
+      </div>
+      <button class="cart-trigger" type="button" aria-label="Open cart" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 4h2l2.2 9.2a2 2 0 0 0 2 1.5h7.7a2 2 0 0 0 1.9-1.4L21 7H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9.5" cy="19" r="1.3" fill="currentColor"/><circle cx="17.5" cy="19" r="1.3" fill="currentColor"/></svg>
+        <span class="cart-count" aria-live="polite">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow"><span data-en>Millet kanji, thoughtfully mixed</span><span data-ml lang="ml">ശ്രദ്ധയോടെ തയ്യാറാക്കിയ മില്ലറ്റ് കഞ്ഞി മിക്സ്</span></p>
+        <h1><span data-en>Good mornings begin with real grains.</span><span data-ml lang="ml">നല്ല പ്രഭാതം, നല്ല ധാന്യങ്ങളിൽ നിന്ന്.</span></h1>
+        <p><span data-en>A wholesome millet kanji mix made for simple, nourishing breakfasts—available in three traditional varieties.</span><span data-ml lang="ml">ലളിതവും പോഷകസമൃദ്ധവുമായ പ്രഭാതഭക്ഷണത്തിനായി തയ്യാറാക്കിയ മില്ലറ്റ് കഞ്ഞി മിക്സ്—മൂന്ന് നാടൻ ഇനങ്ങളിൽ.</span></p>
+        <div class="hero-actions">
+          <a class="primary-btn" href="#shop"><span data-en>Shop the range</span><span data-ml lang="ml">ഉൽപ്പന്നങ്ങൾ കാണാം</span><span aria-hidden="true">↓</span></a>
+          <span class="hero-note"><span data-en>₹600 · 900 g each</span><span data-ml lang="ml">₹600 · ഓരോന്നും 900 ഗ്രാം</span></span>
+        </div>
+      </div>
+      <div class="hero-visual" aria-label="ANS Foods millet kanji mix range">
+        <div class="hero-photo main"><img src="assets/ans-barnyard-pro.jpg" alt="Green pack of ANS Foods Barnyard Millet Kanji Mix" /></div>
+        <div class="hero-photo side"><img src="assets/ans-little-pro.jpg" alt="Purple pack of ANS Foods Little Millet Kanji Mix" /></div>
+        <div class="stamp"><span data-en>100%<br>NATURAL</span><span data-ml lang="ml">100%<br>നാച്വറൽ</span></div>
+      </div>
+    </section>
+
+    <section class="proof" aria-label="Product qualities">
+      <div class="proof-inner">
+        <div class="proof-item"><strong data-en>Pure veg</strong><strong data-ml lang="ml">പൂർണ്ണ സസ്യാഹാരം</strong><span data-en>Plant-based mix</span><span data-ml lang="ml">സസ്യാധിഷ്ഠിത മിശ്രിതം</span></div>
+        <div class="proof-item"><strong data-en>No added colour</strong><strong data-ml lang="ml">നിറം ചേർത്തിട്ടില്ല</strong><span data-en>Nothing unnecessary</span><span data-ml lang="ml">അനാവശ്യമായ ഒന്നുമില്ല</span></div>
+        <div class="proof-item"><strong data-en>No preservatives</strong><strong data-ml lang="ml">പ്രിസർവേറ്റീവുകളില്ല</strong><span data-en>Simply prepared</span><span data-ml lang="ml">ലളിതമായി തയ്യാറാക്കിയത്</span></div>
+        <div class="proof-item"><strong data-en>900 g packs</strong><strong data-ml lang="ml">900 ഗ്രാം പാക്ക്</strong><span data-en>₹600 per pack</span><span data-ml lang="ml">ഒരു പാക്കിന് ₹600</span></div>
+      </div>
+    </section>
+
+    <section class="products" id="shop">
+      <div class="section-head">
+        <h2><span data-en>Choose your grain.</span><span data-ml lang="ml">നിങ്ങളുടെ ധാന്യം തിരഞ്ഞെടുക്കൂ.</span></h2>
+        <p><span data-en>Three millet varieties, each packed as a convenient kanji mix for your everyday table.</span><span data-ml lang="ml">ദൈനംദിന ഭക്ഷണത്തിന് എളുപ്പത്തിൽ ഉപയോഗിക്കാവുന്ന മൂന്ന് മില്ലറ്റ് കഞ്ഞി മിക്സുകൾ.</span></p>
+      </div>
+      <div class="product-grid">
+        <article class="product-card">
+          <button class="product-image-link" type="button" data-details="barnyard" aria-label="View Barnyard Millet Kanji Mix details"><span class="product-image"><img src="assets/ans-barnyard-pro.jpg" alt="ANS Foods Barnyard Millet Kanji Mix in a green 900 gram pack" /></span></button>
+          <div class="product-body">
+            <p class="product-kicker"><span data-en>Barnyard millet</span><span data-ml lang="ml">കുതിരവാലി</span></p>
+            <h3 class="product-title"><button class="product-title-link" type="button" data-details="barnyard"><span data-en>Barnyard Millet Kanji Mix</span><span data-ml lang="ml">കുതിരവാലി മില്ലറ്റ് കഞ്ഞി മിക്സ്</span></button></h3>
+            <p class="product-ml">കുതിരവാലി</p>
+            <p class="product-copy"><span data-en>A naturally hearty grain blend with a light, comforting finish.</span><span data-ml lang="ml">ലളിതവും ഹൃദ്യവുമായ രുചിയുള്ള നാടൻ ധാന്യ മിശ്രിതം.</span></p>
+            <div class="product-bottom">
+              <div class="price"><strong>₹600</strong><span>900 g</span></div>
+              <div class="product-actions">
+                <button class="add-btn" type="button" data-product="barnyard"><span data-en>Add to cart</span><span data-ml lang="ml">കാർട്ടിൽ ചേർക്കുക</span></button>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="product-card">
+          <button class="product-image-link" type="button" data-details="little" aria-label="View Little Millet Kanji Mix details"><span class="product-image"><img src="assets/ans-little-pro.jpg" alt="ANS Foods Little Millet Kanji Mix in a purple 900 gram pack" /></span></button>
+          <div class="product-body">
+            <p class="product-kicker"><span data-en>Little millet</span><span data-ml lang="ml">ചാമ</span></p>
+            <h3 class="product-title"><button class="product-title-link" type="button" data-details="little"><span data-en>Little Millet Kanji Mix</span><span data-ml lang="ml">ചാമ മില്ലറ്റ് കഞ്ഞി മിക്സ്</span></button></h3>
+            <p class="product-ml">ചാമ</p>
+            <p class="product-copy"><span data-en>A gentle everyday millet blend with a familiar, satisfying texture.</span><span data-ml lang="ml">പരിചിതമായ രുചിയും സംതൃപ്തമായ ഘടനയുമുള്ള ദൈനംദിന മില്ലറ്റ് മിശ്രിതം.</span></p>
+            <div class="product-bottom">
+              <div class="price"><strong>₹600</strong><span>900 g</span></div>
+              <div class="product-actions">
+                <button class="add-btn" type="button" data-product="little"><span data-en>Add to cart</span><span data-ml lang="ml">കാർട്ടിൽ ചേർക്കുക</span></button>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="product-card">
+          <button class="product-image-link" type="button" data-details="kodo" aria-label="View Kodo Millet Kanji Mix details"><span class="product-image"><img src="assets/ans-kodo-pro.jpg" alt="ANS Foods Kodo Millet Kanji Mix in a gold 900 gram pack" /></span></button>
+          <div class="product-body">
+            <p class="product-kicker"><span data-en>Kodo millet</span><span data-ml lang="ml">വരക്</span></p>
+            <h3 class="product-title"><button class="product-title-link" type="button" data-details="kodo"><span data-en>Kodo Millet Kanji Mix</span><span data-ml lang="ml">വരക് മില്ലറ്റ് കഞ്ഞി മിക്സ്</span></button></h3>
+            <p class="product-ml">വരക്</p>
+            <p class="product-copy"><span data-en>A robust traditional grain blend for a warm, wholesome bowl.</span><span data-ml lang="ml">ഊഷ്മളവും പോഷകസമൃദ്ധവുമായ കഞ്ഞിക്കായി നാടൻ ധാന്യ മിശ്രിതം.</span></p>
+            <div class="product-bottom">
+              <div class="price"><strong>₹600</strong><span>900 g</span></div>
+              <div class="product-actions">
+                <button class="add-btn" type="button" data-product="kodo"><span data-en>Add to cart</span><span data-ml lang="ml">കാർട്ടിൽ ചേർക്കുക</span></button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="benefits" aria-labelledby="benefitsTitle">
+      <div class="benefits-inner">
+        <div class="benefits-head">
+          <h2 id="benefitsTitle"><span data-en>Why millet belongs at the breakfast table.</span><span data-ml lang="ml">പ്രഭാതഭക്ഷണത്തിൽ മില്ലറ്റ് ഉൾപ്പെടുത്തേണ്ടത് എന്തുകൊണ്ട്?</span></h2>
+          <p><span data-en>Naturally fibre-rich and nourishing, millets bring traditional grains into an easy everyday meal.</span><span data-ml lang="ml">നാരുകളും പോഷകങ്ങളും നിറഞ്ഞ മില്ലറ്റ്, നാടൻ ധാന്യങ്ങളുടെ നന്മ ദൈനംദിന ഭക്ഷണത്തിലേക്ക് എളുപ്പത്തിൽ എത്തിക്കുന്നു.</span></p>
+        </div>
+        <div class="benefit-list">
+          <article class="benefit-item"><span class="benefit-number">01</span><div><h3><span data-en>Supports digestion</span><span data-ml lang="ml">ദഹനത്തിന് നല്ലത്</span></h3><p><span data-en>Millets are rich in dietary fibre, helping support digestion and regularity.</span><span data-ml lang="ml">മില്ലറ്റിൽ നാരുകൾ ധാരാളമായി അടങ്ങിയിട്ടുണ്ട്. ഇത് ദഹനം മെച്ചപ്പെടുത്താനും മലബന്ധം പോലുള്ള പ്രശ്നങ്ങൾ ഒഴിവാക്കാനും സഹായിക്കുന്നു.</span></p></div></article>
+          <article class="benefit-item"><span class="benefit-number">02</span><div><h3><span data-en>Supports healthy weight goals</span><span data-ml lang="ml">ശരീരഭാരം നിയന്ത്രിക്കാൻ സഹായം</span></h3><p><span data-en>Fibre-rich millet meals can feel satisfying and support balanced everyday eating.</span><span data-ml lang="ml">നാരുകൾ നിറഞ്ഞ മില്ലറ്റ് ഭക്ഷണം കൂടുതൽ നേരം തൃപ്തി നൽകുകയും ശരീരഭാരം നിയന്ത്രിക്കാനുള്ള ഭക്ഷണക്രമത്തെ പിന്തുണയ്ക്കുകയും ചെയ്യുന്നു.</span></p></div></article>
+          <article class="benefit-item"><span class="benefit-number">03</span><div><h3><span data-en>Everyday immune support</span><span data-ml lang="ml">പ്രതിരോധശേഷിക്ക് പിന്തുണ</span></h3><p><span data-en>Millets provide nutrients and antioxidants that contribute to everyday wellbeing.</span><span data-ml lang="ml">മില്ലറ്റിലെ ആന്റിഓക്സിഡന്റുകളും പോഷകങ്ങളും ശരീരത്തിന്റെ സ്വാഭാവിക പ്രതിരോധശേഷിയെ പിന്തുണയ്ക്കുന്നു.</span></p></div></article>
+          <article class="benefit-item"><span class="benefit-number">04</span><div><h3><span data-en>Heart-friendly nutrients</span><span data-ml lang="ml">ഹൃദയാരോഗ്യത്തിന് നല്ലത്</span></h3><p><span data-en>Fibre, magnesium and potassium make millets a thoughtful part of a heart-conscious diet.</span><span data-ml lang="ml">മില്ലറ്റിലെ നാരുകൾ, മഗ്നീഷ്യം, പൊട്ടാസ്യം എന്നിവ ഹൃദയാരോഗ്യം ശ്രദ്ധിക്കുന്ന ഭക്ഷണക്രമത്തിന് അനുയോജ്യമാണ്.</span></p></div></article>
+          <article class="benefit-item"><span class="benefit-number">05</span><div><h3><span data-en>Steadier everyday energy</span><span data-ml lang="ml">രക്തത്തിലെ പഞ്ചസാര നിയന്ത്രണത്തിന് പിന്തുണ</span></h3><p><span data-en>Whole millets can support a steadier rise in blood sugar than highly refined grains.</span><span data-ml lang="ml">കൂടുതൽ സംസ്കരിച്ച ധാന്യങ്ങളെ അപേക്ഷിച്ച് മില്ലറ്റ് രക്തത്തിലെ പഞ്ചസാരയുടെ അളവ് പെട്ടെന്ന് ഉയരാതിരിക്കാൻ സഹായിക്കാം.</span></p></div></article>
+          <article class="benefit-item"><span class="benefit-number">06</span><div><h3><span data-en>Naturally gluten-free grain</span><span data-ml lang="ml">സ്വാഭാവികമായി ഗ്ലൂട്ടൻ രഹിതം</span></h3><p><span data-en>Millet itself is naturally gluten-free, offering an alternative to wheat-based grains.</span><span data-ml lang="ml">മില്ലറ്റ് സ്വാഭാവികമായി ഗ്ലൂട്ടൻ രഹിതമായതിനാൽ ഗോതമ്പ് അധിഷ്ഠിത ധാന്യങ്ങൾക്ക് ഒരു മികച്ച ബദലാണ്.</span></p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="story">
+      <div class="story-inner">
+        <h2><span data-en>Honest food, made uncomplicated.</span><span data-ml lang="ml">നല്ല ഭക്ഷണം, ലളിതമായി.</span></h2>
+        <div class="story-copy">
+          <div class="story-row"><span>01</span><div><h3><span data-en>Choose your millet</span><span data-ml lang="ml">മില്ലറ്റ് തിരഞ്ഞെടുക്കൂ</span></h3><p><span data-en>Pick Barnyard, Little or Kodo Millet Kanji Mix.</span><span data-ml lang="ml">കുതിരവാലി, ചാമ, അല്ലെങ്കിൽ വരക് മില്ലറ്റ് കഞ്ഞി മിക്സ് തിരഞ്ഞെടുക്കുക.</span></p></div></div>
+          <div class="story-row"><span>02</span><div><h3><span data-en>Build your order</span><span data-ml lang="ml">ഓർഡർ തയ്യാറാക്കൂ</span></h3><p><span data-en>Adjust the quantity in your cart and review the total.</span><span data-ml lang="ml">കാർട്ടിൽ അളവ് ക്രമീകരിച്ച് ആകെ തുക പരിശോധിക്കുക.</span></p></div></div>
+          <div class="story-row"><span>03</span><div><h3><span data-en>Place your COD order</span><span data-ml lang="ml">COD ഓർഡർ നൽകൂ</span></h3><p><span data-en>Enter your delivery details and place the order. WhatsApp support appears only after the order step is complete.</span><span data-ml lang="ml">ഡെലിവറി വിവരങ്ങൾ നൽകി COD ഓർഡർ നൽകുക. ഓർഡർ ഘട്ടം പൂർത്തിയായ ശേഷമാണ് വാട്ട്‌സ്ആപ്പ് സഹായം ലഭിക്കുക.</span></p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="order-note">
+      <div>
+        <h2><span data-en>Ready for a better breakfast?</span><span data-ml lang="ml">നല്ലൊരു പ്രഭാതഭക്ഷണത്തിന് തയ്യാറാണോ?</span></h2>
+        <p><span data-en>Add your preferred mixes to the cart, review your order and continue to checkout.</span><span data-ml lang="ml">ഇഷ്ടമുള്ള മിക്സുകൾ കാർട്ടിൽ ചേർത്ത് ഓർഡർ പരിശോധിച്ച് ചെക്ക്ഔട്ടിലേക്ക് തുടരൂ.</span></p>
+      </div>
+      <button class="primary-btn open-cart" type="button"><span data-en>View cart</span><span data-ml lang="ml">കാർട്ട് കാണുക</span></button>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-licence"><span>FSSAI 21324159000712</span><span>UDYAM-KL-01-0044310</span></div>
+      <span>ANS Foods · Kerala</span>
+    </div>
+  </footer>
+
+  <section class="detail-overlay" id="detailOverlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+    <div class="detail-topbar">
+      <button class="detail-back" type="button"><span data-en>← Back to all products</span><span data-ml lang="ml">← എല്ലാ ഉൽപ്പന്നങ്ങളിലേക്കും</span></button>
+      <button class="detail-close" type="button" aria-label="Close product details">×</button>
+    </div>
+    <div class="detail-main">
+      <div class="detail-image-wrap"><img class="detail-image" id="detailImage" src="assets/ans-barnyard-pro.jpg" alt="" /></div>
+      <div class="detail-copy">
+        <p class="eyebrow"><span data-en>ANS Foods · Millet kanji mix</span><span data-ml lang="ml">ANS Foods · മില്ലറ്റ് കഞ്ഞി മിക്സ്</span></p>
+        <h2 class="detail-title" id="detailTitle"></h2>
+        <p class="detail-local" id="detailLocal"></p>
+        <p class="detail-description" id="detailDescription"></p>
+        <div class="detail-benefits">
+          <h3><span data-en>Millet wellness benefits</span><span data-ml lang="ml">മില്ലറ്റിന്റെ ആരോഗ്യ ഗുണങ്ങൾ</span></h3>
+          <div class="detail-benefit-list">
+            <div class="detail-benefit"><span>01</span><div><strong><span data-en>Fibre for digestion</span><span data-ml lang="ml">ദഹനത്തിന് നാരുകൾ</span></strong><small><span data-en>Supports digestion and regularity.</span><span data-ml lang="ml">ദഹനം മെച്ചപ്പെടുത്താനും മലബന്ധം ഒഴിവാക്കാനും സഹായിക്കുന്നു.</span></small></div></div>
+            <div class="detail-benefit"><span>02</span><div><strong><span data-en>Balanced everyday eating</span><span data-ml lang="ml">ശരീരഭാരം നിയന്ത്രിക്കാൻ</span></strong><small><span data-en>A satisfying grain choice for healthy weight goals.</span><span data-ml lang="ml">തൃപ്തി നൽകുന്ന ധാന്യമായതിനാൽ ശരീരഭാരം നിയന്ത്രിക്കുന്ന ഭക്ഷണക്രമത്തെ പിന്തുണയ്ക്കുന്നു.</span></small></div></div>
+            <div class="detail-benefit"><span>03</span><div><strong><span data-en>Nutrients and antioxidants</span><span data-ml lang="ml">പോഷകങ്ങളും ആന്റിഓക്സിഡന്റുകളും</span></strong><small><span data-en>Contributes to everyday immune wellbeing.</span><span data-ml lang="ml">ശരീരത്തിന്റെ സ്വാഭാവിക പ്രതിരോധശേഷിയെ പിന്തുണയ്ക്കുന്നു.</span></small></div></div>
+            <div class="detail-benefit"><span>04</span><div><strong><span data-en>Heart-friendly nutrients</span><span data-ml lang="ml">ഹൃദയാരോഗ്യത്തിന് പിന്തുണ</span></strong><small><span data-en>Fibre, magnesium and potassium support a heart-conscious diet.</span><span data-ml lang="ml">നാരുകൾ, മഗ്നീഷ്യം, പൊട്ടാസ്യം എന്നിവ ഹൃദയാരോഗ്യം ശ്രദ്ധിക്കുന്ന ഭക്ഷണക്രമത്തിന് അനുയോജ്യമാണ്.</span></small></div></div>
+            <div class="detail-benefit"><span>05</span><div><strong><span data-en>Steadier energy</span><span data-ml lang="ml">പഞ്ചസാര നിയന്ത്രണത്തിന് പിന്തുണ</span></strong><small><span data-en>Whole millets can support a steadier blood-sugar response than refined grains.</span><span data-ml lang="ml">കൂടുതൽ സംസ്കരിച്ച ധാന്യങ്ങളെ അപേക്ഷിച്ച് രക്തത്തിലെ പഞ്ചസാര പെട്ടെന്ന് ഉയരാതിരിക്കാൻ സഹായിക്കാം.</span></small></div></div>
+            <div class="detail-benefit"><span>06</span><div><strong><span data-en>Naturally gluten-free</span><span data-ml lang="ml">സ്വാഭാവികമായി ഗ്ലൂട്ടൻ രഹിതം</span></strong><small><span data-en>Millet itself is a naturally gluten-free grain.</span><span data-ml lang="ml">മില്ലറ്റ് സ്വാഭാവികമായി ഗ്ലൂട്ടൻ രഹിതമായ ധാന്യമാണ്.</span></small></div></div>
+          </div>
+        </div>
+        <div class="detail-facts" aria-label="Product facts">
+          <div class="detail-fact"><strong><span data-en>100% natural</span><span data-ml lang="ml">100% നാച്വറൽ</span></strong><span><span data-en>Carefully prepared grain mix</span><span data-ml lang="ml">ശ്രദ്ധയോടെ തയ്യാറാക്കിയ ധാന്യ മിശ്രിതം</span></span></div>
+          <div class="detail-fact"><strong><span data-en>Pure vegetarian</span><span data-ml lang="ml">പൂർണ്ണ സസ്യാഹാരം</span></strong><span><span data-en>Plant-based product</span><span data-ml lang="ml">സസ്യാധിഷ്ഠിത ഉൽപ്പന്നം</span></span></div>
+          <div class="detail-fact"><strong><span data-en>No added colour</span><span data-ml lang="ml">നിറം ചേർത്തിട്ടില്ല</span></strong><span><span data-en>Nothing unnecessary</span><span data-ml lang="ml">അനാവശ്യമായ ഒന്നുമില്ല</span></span></div>
+          <div class="detail-fact"><strong><span data-en>No preservatives</span><span data-ml lang="ml">പ്രിസർവേറ്റീവുകളില്ല</span></strong><span><span data-en>Simply prepared</span><span data-ml lang="ml">ലളിതമായി തയ്യാറാക്കിയത്</span></span></div>
+        </div>
+        <div class="detail-buy">
+          <div class="detail-price"><strong>₹600</strong><span><span data-en>per 900 g pack</span><span data-ml lang="ml">900 ഗ്രാം പാക്കിന്</span></span></div>
+          <button class="add-btn detail-add" id="detailAdd" type="button"><span data-en>Add to cart</span><span data-ml lang="ml">കാർട്ടിൽ ചേർക്കുക</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="overlay" id="cartOverlay" aria-hidden="true">
+    <section class="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+      <div class="cart-head">
+        <h2 id="cartTitle"><span data-en>Your order</span><span data-ml lang="ml">നിങ്ങളുടെ ഓർഡർ</span></h2>
+        <button class="close-btn" type="button" aria-label="Close cart">×</button>
+      </div>
+      <div class="cart-items" id="cartItems"></div>
+      <div class="cart-foot">
+        <div class="total-row"><span><span data-en>Total</span><span data-ml lang="ml">ആകെ</span></span><strong id="cartTotal">₹0</strong></div>
+        <p class="delivery-copy"><span data-en>Shipping charges and delivery time are confirmed after you place the order.</span><span data-ml lang="ml">ഓർഡർ നൽകിയ ശേഷം ഷിപ്പിംഗ് ചാർജും ഡെലിവറി സമയവും സ്ഥിരീകരിക്കും.</span></p>
+        <button class="checkout-btn" id="checkoutBtn" type="button"><span data-en>Proceed to checkout</span><span data-ml lang="ml">ചെക്ക്ഔട്ടിലേക്ക് തുടരുക</span></button>
+      </div>
+    </section>
+  </div>
+
+  <section class="checkout-overlay" id="checkoutOverlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+    <div class="detail-topbar">
+      <button class="checkout-back detail-back" type="button"><span data-en>← Back to cart</span><span data-ml lang="ml">← കാർട്ടിലേക്ക് മടങ്ങുക</span></button>
+      <button class="checkout-close detail-close" type="button" aria-label="Close checkout">×</button>
+    </div>
+    <div class="checkout-main">
+      <div>
+        <h2 id="checkoutTitle"><span data-en>Checkout</span><span data-ml lang="ml">ചെക്ക്ഔട്ട്</span></h2>
+        <p class="checkout-intro"><span data-en>Enter the delivery details for this order.</span><span data-ml lang="ml">ഈ ഓർഡറിന്റെ ഡെലിവറി വിവരങ്ങൾ നൽകുക.</span></p>
+        <form class="checkout-form" id="checkoutForm">
+          <div class="field full"><label for="customerName"><span data-en>Full name</span><span data-ml lang="ml">പൂർണ്ണ പേര്</span></label><input id="customerName" name="name" autocomplete="name" required /></div>
+          <div class="field"><label for="customerPhone"><span data-en>Mobile number</span><span data-ml lang="ml">മൊബൈൽ നമ്പർ</span></label><input id="customerPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required /></div>
+          <div class="field"><label for="customerEmail"><span data-en>Email</span><span data-ml lang="ml">ഇമെയിൽ</span></label><input id="customerEmail" name="email" type="email" autocomplete="email" /></div>
+          <div class="field full"><label for="customerAddress"><span data-en>Delivery address</span><span data-ml lang="ml">ഡെലിവറി വിലാസം</span></label><textarea id="customerAddress" name="address" autocomplete="street-address" required></textarea></div>
+          <div class="field"><label for="customerDistrict"><span data-en>District</span><span data-ml lang="ml">ജില്ല</span></label><input id="customerDistrict" name="district" autocomplete="address-level2" required /></div>
+          <div class="field"><label for="customerPincode"><span data-en>PIN code</span><span data-ml lang="ml">പിൻ കോഡ്</span></label><input id="customerPincode" name="pincode" inputmode="numeric" autocomplete="postal-code" required /></div>
+          <div class="payment-panel">
+            <h3><span data-en>Cash on Delivery</span><span data-ml lang="ml">ക്യാഷ് ഓൺ ഡെലിവറി</span></h3>
+            <p><span data-en>Payment is due on delivery. Check your address and order summary, then place your COD order.</span><span data-ml lang="ml">ഡെലിവറി സമയത്താണ് പണം നൽകേണ്ടത്. വിലാസവും ഓർഡർ സംഗ്രഹവും പരിശോധിച്ച് COD ഓർഡർ നൽകുക.</span></p>
+            <button class="confirm-order-btn" type="submit"><span data-en>Place COD order</span><span data-ml lang="ml">COD ഓർഡർ നൽകുക</span></button>
+          </div>
+        </form>
+      </div>
+      <aside class="checkout-summary" aria-label="Order summary">
+        <h3><span data-en>Order summary</span><span data-ml lang="ml">ഓർഡർ സംഗ്രഹം</span></h3>
+        <div id="checkoutSummaryItems"></div>
+        <div class="summary-total"><span><span data-en>Total</span><span data-ml lang="ml">ആകെ</span></span><strong id="checkoutTotal">₹0</strong></div>
+        <p class="after-payment"><span data-en>Payment method: Cash on Delivery. Shipping charge and delivery time will be shown for confirmation after you place the order.</span><span data-ml lang="ml">പേയ്‌മെന്റ് രീതി: ക്യാഷ് ഓൺ ഡെലിവറി. ഓർഡർ നൽകിയ ശേഷം ഷിപ്പിംഗ് ചാർജും ഡെലിവറി സമയവും സ്ഥിരീകരിക്കാം.</span></p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="confirmation-overlay" id="confirmationOverlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="confirmationTitle">
+    <div class="confirmation-card">
+      <div class="confirmation-mark" aria-hidden="true">✓</div>
+      <h2 id="confirmationTitle"><span data-en>COD order placed.</span><span data-ml lang="ml">COD ഓർഡർ നൽകി.</span></h2>
+      <p class="confirmation-lead"><span data-en>Your order details are ready. Now connect with ANS Foods on WhatsApp to confirm Cash on Delivery, shipping charges and delivery time.</span><span data-ml lang="ml">ഓർഡർ വിവരങ്ങൾ തയ്യാറാണ്. ക്യാഷ് ഓൺ ഡെലിവറി, ഷിപ്പിംഗ് ചാർജ്, ഡെലിവറി സമയം എന്നിവ സ്ഥിരീകരിക്കാൻ ഇനി ANS Foods-മായി വാട്ട്‌സ്ആപ്പിൽ ബന്ധപ്പെടുക.</span></p>
+      <div class="confirmation-summary" id="confirmationSummaryItems"></div>
+      <div class="confirmation-total"><span><span data-en>Order total</span><span data-ml lang="ml">ഓർഡർ ആകെ</span></span><strong id="confirmationTotal">₹0</strong></div>
+      <a class="whatsapp-btn" id="whatsappConnect" href="https://wa.me/919037138030" target="_blank" rel="noopener">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.5 11.7a8.5 8.5 0 0 1-12.6 7.4L3 20.5l1.4-4.7A8.5 8.5 0 1 1 20.5 11.7Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.2 7.7c.2-.4.4-.4.7-.4h.5c.2 0 .4 0 .5.4l.8 1.9c.1.3.1.5-.1.7l-.6.7c-.2.2-.1.4 0 .6.6 1.1 1.5 2 2.6 2.6.2.1.4.2.6 0l.8-1c.2-.2.4-.3.7-.2l1.8.9c.3.1.4.3.4.5 0 .4-.2 1.4-1 1.9-.7.5-1.6.7-2.7.4-1.1-.3-2.7-1-4.5-2.7-1.4-1.4-2.4-3.2-2.7-4.4-.3-1.1 0-1.9.4-2.4Z" fill="currentColor"/></svg>
+        <span data-en>Connect on WhatsApp</span><span data-ml lang="ml">വാട്ട്‌സ്ആപ്പിൽ ബന്ധപ്പെടുക</span>
+      </a>
+      <p class="confirmation-note"><span data-en>ANS Foods will confirm shipping charges and the expected delivery time on WhatsApp.</span><span data-ml lang="ml">ഷിപ്പിംഗ് ചാർജും പ്രതീക്ഷിക്കുന്ന ഡെലിവറി സമയവും ANS Foods വാട്ട്‌സ്ആപ്പിൽ സ്ഥിരീകരിക്കും.</span></p>
+      <div class="confirmation-actions">
+        <button class="text-btn confirmation-back" type="button"><span data-en>Back to checkout</span><span data-ml lang="ml">ചെക്ക്ഔട്ടിലേക്ക് മടങ്ങുക</span></button>
+        <button class="text-btn confirmation-close" type="button"><span data-en>Continue shopping</span><span data-ml lang="ml">ഷോപ്പിംഗ് തുടരുക</span></button>
+      </div>
+    </div>
+  </section>
+  <div class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      var products = {
+        barnyard: {
+          en: 'Barnyard Millet Kanji Mix', ml: 'കുതിരവാലി മില്ലറ്റ് കഞ്ഞി മിക്സ്', grainEn: 'Barnyard millet', grainMl: 'കുതിരവാലി',
+          copyEn: 'A naturally hearty grain blend with a light, comforting finish—made for a warm and wholesome everyday bowl.',
+          copyMl: 'ലളിതവും ഹൃദ്യവുമായ രുചിയോടെ, ദിവസവും ഒരു ഊഷ്മളവും പോഷകസമൃദ്ധവുമായ കഞ്ഞി തയ്യാറാക്കാൻ അനുയോജ്യമായ നാടൻ ധാന്യ മിശ്രിതം.',
+          img: 'assets/ans-barnyard-pro.jpg', price: 600
+        },
+        little: {
+          en: 'Little Millet Kanji Mix', ml: 'ചാമ മില്ലറ്റ് കഞ്ഞി മിക്സ്', grainEn: 'Little millet', grainMl: 'ചാമ',
+          copyEn: 'A gentle everyday millet blend with a familiar, satisfying texture—an uncomplicated choice for your breakfast table.',
+          copyMl: 'പരിചിതമായ രുചിയും സംതൃപ്തമായ ഘടനയുമുള്ള ദൈനംദിന മില്ലറ്റ് മിശ്രിതം—പ്രഭാതഭക്ഷണത്തിന് ലളിതമായൊരു തിരഞ്ഞെടുപ്പ്.',
+          img: 'assets/ans-little-pro.jpg', price: 600
+        },
+        kodo: {
+          en: 'Kodo Millet Kanji Mix', ml: 'വരക് മില്ലറ്റ് കഞ്ഞി മിക്സ്', grainEn: 'Kodo millet', grainMl: 'വരക്',
+          copyEn: 'A robust traditional grain blend for a warm, wholesome bowl with a satisfying, homestyle character.',
+          copyMl: 'ഊഷ്മളവും പോഷകസമൃദ്ധവുമായ കഞ്ഞിക്കായി, നാടൻ രുചിയോടെ തയ്യാറാക്കിയ കരുത്തുറ്റ പരമ്പരാഗത ധാന്യ മിശ്രിതം.',
+          img: 'assets/ans-kodo-pro.jpg', price: 600
+        }
+      };
+      var cart = {};
+      var language = 'en';
+      var overlay = document.getElementById('cartOverlay');
+      var detailOverlay = document.getElementById('detailOverlay');
+      var detailImage = document.getElementById('detailImage');
+      var detailTitle = document.getElementById('detailTitle');
+      var detailLocal = document.getElementById('detailLocal');
+      var detailDescription = document.getElementById('detailDescription');
+      var detailAdd = document.getElementById('detailAdd');
+      var cartItems = document.getElementById('cartItems');
+      var cartTotal = document.getElementById('cartTotal');
+      var checkoutBtn = document.getElementById('checkoutBtn');
+      var checkoutOverlay = document.getElementById('checkoutOverlay');
+      var checkoutSummaryItems = document.getElementById('checkoutSummaryItems');
+      var checkoutTotal = document.getElementById('checkoutTotal');
+      var confirmationOverlay = document.getElementById('confirmationOverlay');
+      var confirmationSummaryItems = document.getElementById('confirmationSummaryItems');
+      var confirmationTotal = document.getElementById('confirmationTotal');
+      var whatsappConnect = document.getElementById('whatsappConnect');
+      var checkoutForm = document.getElementById('checkoutForm');
+      var toast = document.querySelector('.toast');
+      var lastFocus = null;
+      var activeDetail = null;
+
+      function t(en, ml) { return language === 'ml' ? ml : en; }
+      function esc(s) { return String(s).replace(/[&<>'"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]; }); }
+      function totalQty() { return Object.keys(cart).reduce(function(sum, id){ return sum + cart[id]; }, 0); }
+      function totalPrice() { return Object.keys(cart).reduce(function(sum, id){ return sum + (products[id].price * cart[id]); }, 0); }
+
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add('show');
+        window.clearTimeout(showToast.timer);
+        showToast.timer = window.setTimeout(function(){ toast.classList.remove('show'); }, 1700);
+      }
+
+      function renderCart() {
+        var ids = Object.keys(cart).filter(function(id){ return cart[id] > 0; });
+        document.querySelector('.cart-count').textContent = totalQty();
+        cartTotal.textContent = '₹' + totalPrice().toLocaleString('en-IN');
+        if (!ids.length) {
+          cartItems.innerHTML = '<div class="empty">' + esc(t('Your cart is empty. Add a millet mix to begin.', 'കാർട്ട് ശൂന്യമാണ്. തുടങ്ങാൻ ഒരു മില്ലറ്റ് മിക്സ് ചേർക്കൂ.')) + '</div>';
+          checkoutBtn.setAttribute('aria-disabled', 'true');
+          checkoutBtn.disabled = true;
+          checkoutBtn.style.opacity = '.45';
+        } else {
+          cartItems.innerHTML = ids.map(function(id){
+            var p = products[id];
+            return '<div class="cart-item" data-cart-id="' + id + '">' +
+              '<img class="cart-thumb" src="' + p.img + '" alt="" />' +
+              '<div><h3>' + esc(language === 'ml' ? p.ml : p.en) + '</h3><p>₹600 · 900 g</p>' +
+              '<div class="qty"><button type="button" data-change="-1" aria-label="Decrease quantity">−</button><span>' + cart[id] + '</span><button type="button" data-change="1" aria-label="Increase quantity">+</button></div></div>' +
+              '<button class="remove-btn" type="button" data-remove>' + esc(t('Remove','നീക്കുക')) + '</button></div>';
+          }).join('');
+          checkoutBtn.removeAttribute('aria-disabled');
+          checkoutBtn.disabled = false;
+          checkoutBtn.style.opacity = '1';
+        }
+      }
+
+      function renderCheckout() {
+        var ids = Object.keys(cart).filter(function(id){ return cart[id] > 0; });
+        checkoutSummaryItems.innerHTML = ids.map(function(id){
+          var p = products[id];
+          return '<div class="summary-item"><span>' + esc(language === 'ml' ? p.ml : p.en) + ' × ' + cart[id] + '</span><strong>₹' + (p.price * cart[id]).toLocaleString('en-IN') + '</strong></div>';
+        }).join('');
+        checkoutTotal.textContent = '₹' + totalPrice().toLocaleString('en-IN');
+      }
+
+      function renderConfirmation() {
+        var ids = Object.keys(cart).filter(function(id){ return cart[id] > 0; });
+        confirmationSummaryItems.innerHTML = ids.map(function(id){
+          var p = products[id];
+          return '<div class="summary-item"><span>' + esc(language === 'ml' ? p.ml : p.en) + ' × ' + cart[id] + '</span><strong>₹' + (p.price * cart[id]).toLocaleString('en-IN') + '</strong></div>';
+        }).join('');
+        confirmationTotal.textContent = '₹' + totalPrice().toLocaleString('en-IN');
+
+        var form = new FormData(checkoutForm);
+        var itemLines = ids.map(function(id){
+          var p = products[id];
+          return '• ' + (language === 'ml' ? p.ml : p.en) + ' × ' + cart[id] + ' — ₹' + (p.price * cart[id]).toLocaleString('en-IN');
+        });
+        var message = language === 'ml'
+          ? 'നമസ്കാരം ANS Foods, ഞാൻ ഈ COD ഓർഡർ നൽകി:\n\n' + itemLines.join('\n') + '\n\nആകെ: ₹' + totalPrice().toLocaleString('en-IN') + '\nപേയ്‌മെന്റ്: ക്യാഷ് ഓൺ ഡെലിവറി\nപേര്: ' + form.get('name') + '\nഫോൺ: ' + form.get('phone') + '\nവിലാസം: ' + form.get('address') + ', ' + form.get('district') + ' - ' + form.get('pincode') + '\n\nCOD, ഷിപ്പിംഗ് ചാർജ്, ഡെലിവറി സമയം എന്നിവ സ്ഥിരീകരിക്കുക.'
+          : 'Hello ANS Foods, I have placed this COD order:\n\n' + itemLines.join('\n') + '\n\nTotal: ₹' + totalPrice().toLocaleString('en-IN') + '\nPayment: Cash on Delivery\nName: ' + form.get('name') + '\nPhone: ' + form.get('phone') + '\nAddress: ' + form.get('address') + ', ' + form.get('district') + ' - ' + form.get('pincode') + '\n\nPlease confirm COD, shipping charges and delivery time.';
+        whatsappConnect.href = 'https://wa.me/919037138030?text=' + encodeURIComponent(message);
+      }
+
+      function renderDetail() {
+        if (!activeDetail) return;
+        var p = products[activeDetail];
+        detailImage.src = p.img;
+        detailImage.alt = t(p.en + ' in a 900 gram pack', p.ml + ' 900 ഗ്രാം പാക്ക്');
+        detailTitle.textContent = language === 'ml' ? p.ml : p.en;
+        detailLocal.textContent = language === 'ml' ? p.grainMl : p.grainEn;
+        detailDescription.textContent = language === 'ml' ? p.copyMl : p.copyEn;
+      }
+
+      function openDetail(id) {
+        activeDetail = id;
+        lastFocus = document.activeElement;
+        renderDetail();
+        detailOverlay.classList.add('open');
+        detailOverlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        detailOverlay.scrollTop = 0;
+        window.setTimeout(function(){ document.querySelector('.detail-back').focus(); }, 30);
+      }
+
+      function closeDetail() {
+        detailOverlay.classList.remove('open');
+        detailOverlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        activeDetail = null;
+        if (lastFocus) lastFocus.focus();
+      }
+
+      function openCart() {
+        lastFocus = document.activeElement;
+        overlay.classList.add('open');
+        overlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        renderCart();
+        window.setTimeout(function(){ document.querySelector('.close-btn').focus(); }, 30);
+      }
+      function closeCart() {
+        overlay.classList.remove('open');
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (lastFocus) lastFocus.focus();
+      }
+      function openCheckout() {
+        if (!totalQty()) return;
+        overlay.classList.remove('open');
+        overlay.setAttribute('aria-hidden', 'true');
+        renderCheckout();
+        checkoutOverlay.classList.add('open');
+        checkoutOverlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        checkoutOverlay.scrollTop = 0;
+        window.setTimeout(function(){ document.getElementById('customerName').focus(); }, 30);
+      }
+      function closeCheckout(reopenCart) {
+        checkoutOverlay.classList.remove('open');
+        checkoutOverlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (reopenCart) openCart();
+        else if (lastFocus) lastFocus.focus();
+      }
+      function openConfirmation() {
+        renderConfirmation();
+        checkoutOverlay.classList.remove('open');
+        checkoutOverlay.setAttribute('aria-hidden', 'true');
+        confirmationOverlay.classList.add('open');
+        confirmationOverlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        confirmationOverlay.scrollTop = 0;
+        window.setTimeout(function(){ whatsappConnect.focus(); }, 30);
+      }
+      function closeConfirmation(backToCheckout) {
+        confirmationOverlay.classList.remove('open');
+        confirmationOverlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (backToCheckout) {
+          checkoutOverlay.classList.add('open');
+          checkoutOverlay.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden';
+          document.querySelector('.confirm-order-btn').focus();
+        } else if (lastFocus) {
+          lastFocus.focus();
+        }
+      }
+
+      document.querySelectorAll('.lang-btn').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          language = btn.getAttribute('data-lang');
+          document.body.classList.toggle('ml', language === 'ml');
+          document.documentElement.lang = language === 'ml' ? 'ml' : 'en';
+          document.querySelectorAll('.lang-btn').forEach(function(b){ b.setAttribute('aria-pressed', String(b === btn)); });
+          renderCart();
+          renderDetail();
+          renderCheckout();
+          if (confirmationOverlay.classList.contains('open')) renderConfirmation();
+        });
+      });
+      document.querySelectorAll('.add-btn[data-product]').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var id = btn.getAttribute('data-product');
+          cart[id] = (cart[id] || 0) + 1;
+          renderCart();
+          showToast(t('Added to your cart', 'കാർട്ടിൽ ചേർത്തു'));
+          btn.classList.add('is-added');
+          window.setTimeout(function(){ btn.classList.remove('is-added'); }, 650);
+        });
+      });
+      document.querySelectorAll('button[data-details]').forEach(function(btn){
+        btn.addEventListener('click', function(){ openDetail(btn.getAttribute('data-details')); });
+      });
+      detailAdd.addEventListener('click', function(){
+        if (!activeDetail) return;
+        cart[activeDetail] = (cart[activeDetail] || 0) + 1;
+        renderCart();
+        showToast(t('Added to your cart', 'കാർട്ടിൽ ചേർത്തു'));
+        detailAdd.classList.add('is-added');
+        window.setTimeout(function(){ detailAdd.classList.remove('is-added'); }, 650);
+      });
+      document.querySelector('.detail-back').addEventListener('click', closeDetail);
+      document.querySelector('.detail-close').addEventListener('click', closeDetail);
+      document.querySelector('.cart-trigger').addEventListener('click', openCart);
+      document.querySelector('.open-cart').addEventListener('click', openCart);
+      document.querySelector('.close-btn').addEventListener('click', closeCart);
+      overlay.addEventListener('click', function(e){ if (e.target === overlay) closeCart(); });
+      cartItems.addEventListener('click', function(e){
+        var row = e.target.closest('[data-cart-id]');
+        if (!row) return;
+        var id = row.getAttribute('data-cart-id');
+        if (e.target.hasAttribute('data-change')) {
+          cart[id] += Number(e.target.getAttribute('data-change'));
+          if (cart[id] <= 0) delete cart[id];
+          renderCart();
+        }
+        if (e.target.hasAttribute('data-remove')) { delete cart[id]; renderCart(); }
+      });
+      checkoutBtn.addEventListener('click', openCheckout);
+      document.querySelector('.checkout-back').addEventListener('click', function(){ closeCheckout(true); });
+      document.querySelector('.checkout-close').addEventListener('click', function(){ closeCheckout(false); });
+      checkoutForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        if (!checkoutForm.reportValidity()) return;
+        openConfirmation();
+      });
+      document.querySelector('.confirmation-back').addEventListener('click', function(){ closeConfirmation(true); });
+      document.querySelector('.confirmation-close').addEventListener('click', function(){ closeConfirmation(false); });
+      document.addEventListener('keydown', function(e){
+        if (e.key !== 'Escape') return;
+        if (confirmationOverlay.classList.contains('open')) closeConfirmation(true);
+        else if (checkoutOverlay.classList.contains('open')) closeCheckout(false);
+        else if (overlay.classList.contains('open')) closeCart();
+        else if (detailOverlay.classList.contains('open')) closeDetail();
+      });
+      renderCart();
+      renderCheckout();
+    })();
+  </script>
+</body>
+</html>
