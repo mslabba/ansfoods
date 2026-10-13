@@ -30,7 +30,7 @@ async function createOrder({ env, appId, secretKey, order, customer, appUrl }) {
     },
     order_meta: {
       // Cashfree appends ?order_id=<cfOrderId> to this URL after payment.
-      return_url: `${appUrl}/order-status.html?order_id=${encodeURIComponent(order.id)}`,
+      return_url: `${appUrl}/order-status?order_id=${encodeURIComponent(order.id)}`,
     },
   };
   const res = await fetch(url, {

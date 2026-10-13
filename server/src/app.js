@@ -17,6 +17,15 @@ function createApp() {
   app.use('/api', require('./routes/public'));
   app.use('/api/admin', require('./routes/admin'));
 
+  // Clean URLs: the site never shows .html. Redirect any direct .html hit
+  // (old links, bookmarks) to the canonical path, keeping query strings.
+  for (const [oldPath, newPath] of [['/shop.html', '/shop'], ['/order-status.html', '/order-status'], ['/index.html', '/']]) {
+    app.get(oldPath, (req, res) => {
+      const q = req.originalUrl.indexOf('?');
+      res.redirect(301, newPath + (q === -1 ? '' : req.originalUrl.slice(q)));
+    });
+  }
+
   app.use(express.static(PUBLIC_DIR, { extensions: ['html'] }));
 
   // eslint-disable-next-line no-unused-vars
