@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Shop — ANS Foods</title>
+<meta name="description" content="Shop ANS Foods millet kanji mixes — barnyard, little and kodo millet. Search and filter the range." />
+<link rel="stylesheet" href="assets/site.css" />
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+<style>
+  .shop-hero { max-width: 1240px; margin: 0 auto; padding: clamp(44px, 6vw, 76px) 28px 10px; }
+  .shop-hero .brand-logo { width: 118px; margin: 0 0 22px; }
+  .shop-hero h1 {
+    font-family: var(--serif); font-size: clamp(38px, 5vw, 62px);
+    line-height: 1; letter-spacing: -.04em; margin: 0 0 14px; text-wrap: balance;
+  }
+  .shop-hero > p { margin: 0; color: var(--muted); max-width: 620px; font-size: 16px; }
+  .shop-toolbar {
+    max-width: 1240px; margin: 26px auto 0; padding: 18px 28px;
+    display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: center; justify-content: space-between;
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  }
+  .shop-search { position: relative; flex: 1 1 240px; max-width: 360px; }
+  .shop-search input {
+    width: 100%; font: inherit; font-size: 15px; padding: 11px 38px 11px 16px;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--paper-2); color: var(--ink);
+  }
+  .shop-search input:focus { outline: none; border-color: var(--forest); box-shadow: 0 0 0 3px color-mix(in srgb, var(--forest) 18%, transparent); }
+  .shop-search .clear-search {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    border: 0; background: transparent; color: var(--muted); font-size: 18px; cursor: pointer;
+    width: 28px; height: 28px; display: none; align-items: center; justify-content: center;
+  }
+  .shop-search.has-text .clear-search { display: inline-flex; }
+  .chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+    border: 1px solid var(--line); background: transparent; color: var(--muted);
+    border-radius: 999px; padding: 9px 16px;
+  }
+  .chip[aria-pressed="true"] { background: var(--forest-deep); border-color: var(--forest-deep); color: var(--on-green); }
+  .shop-meta { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+  .result-count { font-size: 13px; color: var(--muted); white-space: nowrap; }
+  .sort-wrap select {
+    font: inherit; font-size: 14px; padding: 9px 12px; border: 1px solid var(--line);
+    border-radius: 10px; background: var(--paper-2); color: var(--ink); cursor: pointer;
+  }
+  .shop-grid-wrap { max-width: 1240px; margin: 0 auto; padding: 34px 28px 80px; }
+  .shop-empty { text-align: center; padding: 70px 20px; color: var(--muted); }
+  .shop-empty h2 { font-family: var(--serif); color: var(--ink); font-size: 28px; margin: 0 0 10px; }
+  .shop-empty p { margin: 0 0 20px; }
+  a.checkout-btn { text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+  @media (max-width: 720px) {
+    .shop-hero, .shop-toolbar, .shop-grid-wrap { padding-left: 18px; padding-right: 18px; }
+    .shop-meta { margin-left: 0; width: 100%; justify-content: space-between; }
+  }
+</style>
+</head>
+<body>
+  <header class="utility" aria-label="Store controls">
+    <div class="origin"><span data-en>Made in Kerala</span><span data-ml lang="ml">കേരളത്തിൽ നിർമ്മിച്ചത്</span></div>
+    <div class="utility-actions">
+      <a class="nav-link" href="index.html"><span data-en>Home</span><span data-ml lang="ml">ഹോം</span></a>
+      <div class="lang-switch" aria-label="Language">
+        <button class="lang-btn" type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button class="lang-btn" type="button" data-lang="ml" aria-pressed="false">മലയാളം</button>
+      </div>
+      <button class="cart-trigger" type="button" aria-label="Open cart" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 4h2l2.2 9.2a2 2 0 0 0 2 1.5h7.7a2 2 0 0 0 1.9-1.4L21 7H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9.5" cy="19" r="1.3" fill="currentColor"/><circle cx="17.5" cy="19" r="1.3" fill="currentColor"/></svg>
+        <span class="cart-count" aria-live="polite">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="shop-hero">
+      <img class="brand-logo" src="assets/logo.png" alt="ANS Foods logo" width="240" height="124" />
+      <h1><span data-en>Shop the range.</span><span data-ml lang="ml">ഉൽപ്പന്നങ്ങൾ കാണൂ.</span></h1>
+      <p><span data-en>Three traditional millet kanji mixes, made for simple, nourishing breakfasts. Search or filter to find your grain.</span><span data-ml lang="ml">ലളിതവും പോഷകസമൃദ്ധവുമായ പ്രഭാതഭക്ഷണത്തിനായി മൂന്ന് നാടൻ മില്ലറ്റ് കഞ്ഞി മിക്സുകൾ. തിരയൂ അല്ലെങ്കിൽ ഫിൽട്ടർ ചെയ്യൂ.</span></p>
+    </section>
+
+    <section class="shop-toolbar" aria-label="Search and filter products">
+      <div class="shop-search" id="searchWrap">
+        <input type="search" id="shopSearch" autocomplete="off"
+          data-ph-en="Search millet mixes…" data-ph-ml="മില്ലറ്റ് മിക്സുകൾ തിരയൂ…" placeholder="Search millet mixes…" aria-label="Search products" />
+        <button class="clear-search" id="clearSearch" type="button" aria-label="Clear search">×</button>
+      </div>
+      <div class="chip-row" id="typeChips" role="group" aria-label="Filter by millet type">
+        <button class="chip" type="button" data-type="all" aria-pressed="true"><span data-en>All</span><span data-ml lang="ml">എല്ലാം</span></button>
+        <button class="chip" type="button" data-type="barnyard" aria-pressed="false"><span data-en>Barnyard</span><span data-ml lang="ml">കുതിരവാലി</span></button>
+        <button class="chip" type="button" data-type="little" aria-pressed="false"><span data-en>Little</span><span data-ml lang="ml">ചാമ</span></button>
+        <button class="chip" type="button" data-type="kodo" aria-pressed="false"><span data-en>Kodo</span><span data-ml lang="ml">വരക്</span></button>
+      </div>
+      <div class="shop-meta">
+        <span class="result-count" id="resultCount"></span>
+        <span class="sort-wrap">
+          <select id="sortSel" aria-label="Sort products">
+            <option value="featured" data-en="Sort: Featured" data-ml="തരംതിരിവ്: ശുപാർശ">Sort: Featured</option>
+            <option value="price-asc" data-en="Price: Low to High" data-ml="വില: കുറഞ്ഞത് മുതൽ">Price: Low to High</option>
+            <option value="price-desc" data-en="Price: High to Low" data-ml="വില: കൂടിയത് മുതൽ">Price: High to Low</option>
+            <option value="name" data-en="Name: A to Z" data-ml="പേര്: അ മുതൽ">Name: A to Z</option>
+          </select>
+        </span>
+      </div>
+    </section>
+
+    <div class="shop-grid-wrap">
+      <div class="product-grid" id="shopGrid"></div>
+      <div class="shop-empty" id="shopEmpty" hidden>
+        <h2><span data-en>No mixes found</span><span data-ml lang="ml">ഒന്നും കണ്ടെത്തിയില്ല</span></h2>
+        <p><span data-en>Try a different search or clear the filters.</span><span data-ml lang="ml">മറ്റൊരു തിരയൽ പരീക്ഷിക്കൂ അല്ലെങ്കിൽ ഫിൽട്ടറുകൾ മായ്ക്കൂ.</span></p>
+        <button class="secondary-btn" id="clearFilters" type="button"><span data-en>Clear search &amp; filters</span><span data-ml lang="ml">തിരയലും ഫിൽട്ടറുകളും മായ്ക്കൂ</span></button>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-licence"><span>FSSAI 21324159000712</span><span>UDYAM-KL-01-0044310</span></div>
+      <img class="footer-logo" src="assets/logo.png" alt="ANS Foods · Kerala" width="240" height="124" />
+    </div>
+  </footer>
+
+  <div class="overlay" id="cartOverlay" aria-hidden="true">
+    <section class="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+      <div class="cart-head">
+        <h2 id="cartTitle"><span data-en>Your order</span><span data-ml lang="ml">നിങ്ങളുടെ ഓർഡർ</span></h2>
+        <button class="close-btn" type="button" aria-label="Close cart">×</button>
+      </div>
+      <div class="cart-items" id="cartItems"></div>
+      <div class="cart-foot">
+        <div class="total-row"><span><span data-en>Total</span><span data-ml lang="ml">ആകെ</span></span><strong id="cartTotal">₹0</strong></div>
+        <p class="delivery-copy"><span data-en>Shipping charges and delivery time are confirmed after you place the order.</span><span data-ml lang="ml">ഓർഡർ നൽകിയ ശേഷം ഷിപ്പിംഗ് ചാർജും ഡെലിവറി സമയവും സ്ഥിരീകരിക്കും.</span></p>
+        <a class="checkout-btn" id="checkoutBtn" href="index.html#cart"><span data-en>Proceed to checkout</span><span data-ml lang="ml">ചെക്ക്ഔട്ടിലേക്ക് തുടരുക</span></a>
+      </div>
+    </section>
+  </div>
+
+  <section class="detail-overlay" id="detailOverlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+    <div class="detail-topbar">
+      <button class="detail-back" type="button"><span data-en>← Back to all products</span><span data-ml lang="ml">← എല്ലാ ഉൽപ്പന്നങ്ങളിലേക്കും</span></button>
+      <button class="detail-close" type="button" aria-label="Close product details">×</button>
+    </div>
+    <div class="detail-main">
+      <div class="detail-image-wrap"><img class="detail-image" id="detailImage" src="assets/ans-barnyard-pro.jpg" alt="" /></div>
+      <div class="detail-copy">
+        <p class="eyebrow"><span data-en>ANS Foods · Millet kanji mix</span><span data-ml lang="ml">ANS Foods · മില്ലറ്റ് കഞ്ഞി മിക്സ്</span></p>
+        <h2 class="detail-title" id="detailTitle"></h2>
+        <p class="detail-local" id="detailLocal"></p>
+        <p class="detail-description" id="detailDescription"></p>
+        <div class="detail-buy">
+          <div class="detail-price"><strong>₹600</strong><span><span data-en>per 900 g pack</span><span data-ml lang="ml">900 ഗ്രാം പാക്കിന്</span></span></div>
+          <button class="add-btn detail-add" id="detailAdd" type="button"><span data-en>Add to cart</span><span data-ml lang="ml">കാർട്ടിൽ ചേർക്കുക</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/store.js"></script>
+<script>
+(function () {
+  'use strict';
+  var products = ANS.PRODUCTS;
+  var cart = ANS.cart.load();
+  var language = ANS.getLang();
+  ANS.applyLang();
+
+  var grid = document.getElementById('shopGrid');
+  var empty = document.getElementById('shopEmpty');
+  var searchInput = document.getElementById('shopSearch');
+  var searchWrap = document.getElementById('searchWrap');
+  var clearSearch = document.getElementById('clearSearch');
+  var chips = document.getElementById('typeChips');
+  var sortSel = document.getElementById('sortSel');
+  var resultCount = document.getElementById('resultCount');
+  var toast = document.querySelector('.toast');
+  var overlay = document.getElementById('cartOverlay');
+  var cartItems = document.getElementById('cartItems');
+  var cartTotal = document.getElementById('cartTotal');
+  var detailOverlay = document.getElementById('detailOverlay');
+  var activeDetail = null;
+  var lastFocus = null;
+
+  var state = { q: '', type: 'all', sort: 'featured' };
+
+  function t(en, ml) { return language === 'ml' ? ml : en; }
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    window.setTimeout(function () { toast.classList.remove('show'); }, 1800);
+  }
+
+  /* ---------- filtering & sorting ---------- */
+  function visibleProducts() {
+    var q = state.q.trim().toLowerCase();
+    var list = Object.keys(products).map(function (id) { return products[id]; });
+    if (state.type !== 'all') list = list.filter(function (p) { return p.type === state.type; });
+    if (q) {
+      list = list.filter(function (p) {
+        return (p.en + ' ' + p.ml + ' ' + p.grainEn + ' ' + p.grainMl).toLowerCase().indexOf(q) !== -1;
+      });
+    }
+    var nameOf = function (p) { return language === 'ml' ? p.ml : p.en; };
+    if (state.sort === 'price-asc') list.sort(function (a, b) { return a.price - b.price; });
+    else if (state.sort === 'price-desc') list.sort(function (a, b) { return b.price - a.price; });
+    else if (state.sort === 'name') list.sort(function (a, b) { return nameOf(a).localeCompare(nameOf(b)); });
+    else list.sort(function (a, b) { return a.featured - b.featured; });
+    return list;
+  }
+
+  function cardHTML(p) {
+    var name = t(p.en, p.ml), grain = t(p.grainEn, p.grainMl);
+    return '<article class="product-card">' +
+      '<button class="product-image-link" type="button" data-details="' + p.id + '" aria-label="' + ANS.esc(t('View ', 'കാണൂ ') + name) + '">' +
+      '<span class="product-image"><img src="' + p.img + '" alt="ANS Foods ' + ANS.esc(name) + '" loading="lazy" /></span></button>' +
+      '<div class="product-body">' +
+      '<p class="product-kicker">' + ANS.esc(grain) + '</p>' +
+      '<h3 class="product-title"><button class="product-title-link" type="button" data-details="' + p.id + '">' + ANS.esc(name) + '</button></h3>' +
+      '<div class="product-bottom"><div class="price"><strong>' + ANS.money(p.price) + '</strong><span>900 g</span></div>' +
+      '<div class="product-actions"><button class="add-btn" type="button" data-product="' + p.id + '">' + t('Add to cart', 'കാർട്ടിൽ ചേർക്കുക') + '</button></div>' +
+      '</div></div></article>';
+  }
+
+  function renderGrid() {
+    var list = visibleProducts();
+    grid.innerHTML = list.map(cardHTML).join('');
+    empty.hidden = list.length > 0;
+    var n = list.length;
+    resultCount.textContent = n === 1 ? t('1 product', '1 ഉൽപ്പന്നം')
+      : t(n + ' products', n + ' ഉൽപ്പന്നങ്ങൾ');
+    grid.querySelectorAll('[data-product]').forEach(function (btn) {
+      btn.addEventListener('click', function () { addToCart(btn.getAttribute('data-product')); });
+    });
+    grid.querySelectorAll('[data-details]').forEach(function (btn) {
+      btn.addEventListener('click', function () { openDetail(btn.getAttribute('data-details')); });
+    });
+  }
+
+  /* ---------- cart (shared with the home page) ---------- */
+  function addToCart(id) {
+    cart[id] = Math.min(99, (cart[id] || 0) + 1);
+    renderCart();
+    showToast(t('Added to your cart', 'കാർട്ടിൽ ചേർത്തു'));
+  }
+  function totalQty() { return ANS.cart.count(cart); }
+
+  function renderCart() {
+    ANS.cart.save(cart);
+    var ids = Object.keys(cart).filter(function (id) { return cart[id] > 0 && products[id]; });
+    document.querySelector('.cart-count').textContent = totalQty();
+    cartTotal.textContent = ANS.money(ANS.cart.total(cart));
+    if (!ids.length) {
+      cartItems.innerHTML = '<p class="cart-empty">' + t('Your cart is empty.', 'നിങ്ങളുടെ കാർട്ട് ശൂന്യമാണ്.') + '</p>';
+      return;
+    }
+    cartItems.innerHTML = ids.map(function (id) {
+      var p = products[id];
+      return '<div class="cart-item"><img src="' + p.img + '" alt="" />' +
+        '<div><h3>' + ANS.esc(t(p.en, p.ml)) + '</h3><p>' + ANS.money(p.price) + ' · 900 g</p>' +
+        '<div class="qty"><button type="button" data-id="' + id + '" data-change="-1" aria-label="Decrease quantity">−</button><span>' + cart[id] + '</span><button type="button" data-id="' + id + '" data-change="1" aria-label="Increase quantity">+</button></div></div>' +
+        '<button class="remove-btn" type="button" data-id="' + id + '" data-remove>' + t('Remove', 'നീക്കുക') + '</button></div>';
+    }).join('');
+  }
+  cartItems.addEventListener('click', function (e) {
+    var id = e.target.getAttribute && e.target.getAttribute('data-id');
+    if (!id) return;
+    if (e.target.hasAttribute('data-change')) {
+      cart[id] = (cart[id] || 0) + Number(e.target.getAttribute('data-change'));
+      if (cart[id] <= 0) delete cart[id];
+      renderCart();
+    } else if (e.target.hasAttribute('data-remove')) {
+      delete cart[id]; renderCart();
+    }
+  });
+
+  function openCart() {
+    lastFocus = document.activeElement;
+    overlay.classList.add('open'); overlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    overlay.querySelector('.close-btn').focus();
+  }
+  function closeCart() {
+    overlay.classList.remove('open'); overlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (lastFocus) lastFocus.focus();
+  }
+  document.querySelector('.cart-trigger').addEventListener('click', openCart);
+  overlay.querySelector('.close-btn').addEventListener('click', closeCart);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) closeCart(); });
+
+  /* ---------- quick view ---------- */
+  function openDetail(id) {
+    var p = products[id]; if (!p) return;
+    activeDetail = id;
+    document.getElementById('detailImage').src = p.img;
+    document.getElementById('detailImage').alt = 'ANS Foods ' + t(p.en, p.ml);
+    document.getElementById('detailTitle').textContent = t(p.en, p.ml);
+    document.getElementById('detailLocal').textContent = t(p.grainEn, p.grainMl);
+    document.getElementById('detailDescription').textContent = t(p.copyEn, p.copyMl);
+    lastFocus = document.activeElement;
+    detailOverlay.classList.add('open'); detailOverlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    detailOverlay.querySelector('.detail-close').focus();
+  }
+  function closeDetail() {
+    detailOverlay.classList.remove('open'); detailOverlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    activeDetail = null;
+    if (lastFocus) lastFocus.focus();
+  }
+  detailOverlay.querySelector('.detail-close').addEventListener('click', closeDetail);
+  detailOverlay.querySelector('.detail-back').addEventListener('click', closeDetail);
+  detailOverlay.addEventListener('click', function (e) { if (e.target === detailOverlay) closeDetail(); });
+  document.getElementById('detailAdd').addEventListener('click', function () {
+    if (activeDetail) { addToCart(activeDetail); closeDetail(); openCart(); }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if (detailOverlay.classList.contains('open')) closeDetail();
+    else if (overlay.classList.contains('open')) closeCart();
+  });
+
+  /* ---------- toolbar events ---------- */
+  var searchTimer = null;
+  searchInput.addEventListener('input', function () {
+    searchWrap.classList.toggle('has-text', searchInput.value.length > 0);
+    window.clearTimeout(searchTimer);
+    searchTimer = window.setTimeout(function () { state.q = searchInput.value; renderGrid(); }, 160);
+  });
+  clearSearch.addEventListener('click', function () {
+    searchInput.value = ''; state.q = '';
+    searchWrap.classList.remove('has-text'); renderGrid(); searchInput.focus();
+  });
+  document.getElementById('clearFilters').addEventListener('click', function () {
+    state.q = ''; state.type = 'all'; state.sort = 'featured';
+    searchInput.value = ''; sortSel.value = 'featured';
+    searchWrap.classList.remove('has-text');
+    chips.querySelectorAll('.chip').forEach(function (c) {
+      c.setAttribute('aria-pressed', String(c.getAttribute('data-type') === 'all'));
+    });
+    renderGrid();
+  });
+  chips.addEventListener('click', function (e) {
+    var btn = e.target.closest('.chip'); if (!btn) return;
+    state.type = btn.getAttribute('data-type');
+    chips.querySelectorAll('.chip').forEach(function (c) {
+      c.setAttribute('aria-pressed', String(c === btn));
+    });
+    renderGrid();
+  });
+  sortSel.addEventListener('change', function () { state.sort = sortSel.value; renderGrid(); });
+
+  /* ---------- language ---------- */
+  function syncPlaceholders() {
+    searchInput.placeholder = searchInput.getAttribute(language === 'ml' ? 'data-ph-ml' : 'data-ph-en');
+    sortSel.querySelectorAll('option').forEach(function (o) {
+      o.textContent = o.getAttribute(language === 'ml' ? 'data-ml' : 'data-en');
+    });
+  }
+  document.querySelectorAll('.lang-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      language = ANS.setLang(btn.getAttribute('data-lang'));
+      syncPlaceholders(); renderGrid(); renderCart();
+    });
+  });
+
+  /* ---------- init ---------- */
+  syncPlaceholders();
+  renderGrid();
+  renderCart();
+})();
+</script>
+</body>
+</html>
