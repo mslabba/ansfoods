@@ -6,6 +6,7 @@ const express = require('express');
 const db = require('../db');
 const settings = require('../lib/settings');
 const cashfree = require('../lib/cashfree');
+const products = require('../lib/products');
 const stock = require('../lib/stock');
 const { notify } = require('../lib/notify');
 
@@ -67,6 +68,7 @@ router.post('/cashfree', async (req, res) => {
       if (payment.payment_status === 'SUCCESS') {
         await markPaid(client, o, payment);
         await client.query('COMMIT');
+        await products.refresh().catch(() => {}); // stock changed
         notify('payment_success', { ...orderView, status: 'paid' }, customer).catch((e) => console.error('notify failed:', e.message));
       } else if (payment.payment_status === 'FAILED' || payment.payment_status === 'USER_DROPPED') {
         await markFailed(client, o, payment);

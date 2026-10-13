@@ -109,6 +109,7 @@ router.patch('/orders/:id', async (req, res) => {
         await stock.restoreForOrder(client, order); // no-op if stock was never taken
       }
       await client.query('COMMIT');
+      if (status === 'cancelled') await productsLib.refresh().catch(() => {}); // stock may have changed
     } catch (err) {
       await client.query('ROLLBACK');
       throw err;
@@ -147,6 +148,7 @@ router.post('/orders/:id/sync-payment', async (req, res) => {
         await client.query(`UPDATE payments SET status = 'success' WHERE order_id = $1 AND status = 'initiated'`, [order.id]);
         await stock.decrementForOrder(client, order);
         await client.query('COMMIT');
+        await productsLib.refresh().catch(() => {}); // stock changed
       } catch (err) {
         await client.query('ROLLBACK');
         throw err;

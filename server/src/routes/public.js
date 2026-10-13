@@ -135,6 +135,7 @@ router.post('/orders', async (req, res) => {
     const v = await validateOrderBody(req.body);
     if (v.errors.length) return res.status(400).json({ error: v.errors[0] });
     const { order, customerId } = await insertOrder(v);
+    if (v.method === 'cod') await productsLib.refresh().catch(() => {}); // stock changed
     const fullOrder = { ...order, items: v.lines };
     if (v.method === 'cod') {
       notify('order_cod', fullOrder, { ...v.customer }).catch((e) => console.error('notify failed:', e.message));
