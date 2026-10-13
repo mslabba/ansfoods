@@ -10,7 +10,7 @@ async function migrate() {
     name TEXT PRIMARY KEY, applied_at TIMESTAMPTZ DEFAULT now())`);
   const { rows } = await pool.query('SELECT name FROM schema_migrations');
   const done = new Set(rows.map((r) => r.name));
-  const dir = path.join(__dirname, '..', '..', 'migrations');
+  const dir = path.join(__dirname, '..', 'migrations');
   const files = fs.readdirSync(dir).filter((f) => f.endsWith('.sql')).sort();
   for (const f of files) {
     if (done.has(f)) continue;
