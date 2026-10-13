@@ -211,22 +211,9 @@
     return list;
   }
 
-  function cardHTML(p) {
-    var name = t(p.en, p.ml), grain = t(p.grainEn, p.grainMl);
-    return '<article class="product-card">' +
-      '<button class="product-image-link" type="button" data-details="' + p.id + '" aria-label="' + ANS.esc(t('View ', 'കാണൂ ') + name) + '">' +
-      '<span class="product-image"><img src="' + p.img + '" alt="ANS Foods ' + ANS.esc(name) + '" loading="lazy" /></span></button>' +
-      '<div class="product-body">' +
-      '<p class="product-kicker">' + ANS.esc(grain) + '</p>' +
-      '<h3 class="product-title"><button class="product-title-link" type="button" data-details="' + p.id + '">' + ANS.esc(name) + '</button></h3>' +
-      '<div class="product-bottom"><div class="price"><strong>' + ANS.money(p.price) + '</strong><span>900 g</span></div>' +
-      '<div class="product-actions"><button class="add-btn" type="button" data-product="' + p.id + '">' + t('Add to cart', 'കാർട്ടിൽ ചേർക്കുക') + '</button></div>' +
-      '</div></div></article>';
-  }
-
   function renderGrid() {
     var list = visibleProducts();
-    grid.innerHTML = list.map(cardHTML).join('');
+    grid.innerHTML = list.map(function (p) { return ANS.productCardHTML(p, language); }).join('');
     empty.hidden = list.length > 0;
     var n = list.length;
     resultCount.textContent = n === 1 ? t('1 product', '1 ഉൽപ്പന്നം')
@@ -241,7 +228,13 @@
 
   /* ---------- cart (shared with the home page) ---------- */
   function addToCart(id) {
-    cart[id] = Math.min(99, (cart[id] || 0) + 1);
+    var p = products[id];
+    if (!p) return;
+    if (p.stock <= 0) {
+      showToast(t('Sorry, this item is out of stock.', 'ക്ഷമിക്കണം, ഈ ഉൽപ്പന്നം സ്റ്റോക്കില്ല.'));
+      return;
+    }
+    cart[id] = Math.min(p.stock, (cart[id] || 0) + 1);
     renderCart();
     showToast(t('Added to your cart', 'കാർട്ടിൽ ചേർത്തു'));
   }
@@ -371,6 +364,9 @@
   syncPlaceholders();
   renderGrid();
   renderCart();
+  ANS.refreshProducts().then(function (updated) {
+    if (updated) { renderGrid(); renderCart(); }
+  });
 })();
 </script>
 </body>

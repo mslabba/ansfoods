@@ -6,6 +6,7 @@ const express = require('express');
 const db = require('../db');
 const settings = require('../lib/settings');
 const cashfree = require('../lib/cashfree');
+const stock = require('../lib/stock');
 const { notify } = require('../lib/notify');
 
 const router = express.Router();
@@ -16,6 +17,7 @@ async function markPaid(client, order, paymentData) {
     `UPDATE payments SET status = 'success', gateway_payment_id = $2, raw = $3 WHERE order_id = $1 AND status = 'initiated'`,
     [order.id, paymentData.payment_id || null, JSON.stringify(paymentData)]
   );
+  await stock.decrementForOrder(client, order);
 }
 
 async function markFailed(client, order, paymentData) {

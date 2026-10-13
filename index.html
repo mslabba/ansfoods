@@ -61,54 +61,9 @@
     <section class="products" id="shop">
       <div class="section-head">
         <h2><span data-en>Choose your grain.</span><span data-ml lang="ml">നിങ്ങളുടെ ധാന്യം തിരഞ്ഞെടുക്കൂ.</span></h2>
-        <p><span data-en>Three millet varieties, each packed as a convenient kanji mix for your everyday table.</span><span data-ml lang="ml">ദൈനംദിന ഭക്ഷണത്തിന് എളുപ്പത്തിൽ ഉപയോഗിക്കാവുന്ന മൂന്ന് മില്ലറ്റ് കഞ്ഞി മിക്സുകൾ.</span></p>
+        <p><span data-en>Wholesome millet varieties, each packed as a convenient kanji mix for your everyday table.</span><span data-ml lang="ml">ദൈനംദിന ഭക്ഷണത്തിന് എളുപ്പത്തിൽ ഉപയോഗിക്കാവുന്ന മില്ലറ്റ് കഞ്ഞി മിക്സുകൾ.</span></p>
       </div>
-      <div class="product-grid">
-        <article class="product-card">
-          <button class="product-image-link" type="button" data-details="barnyard" aria-label="View Barnyard Millet Kanji Mix details"><span class="product-image"><img src="assets/ans-barnyard-pro.jpg" alt="ANS Foods Barnyard Millet Kanji Mix in a green 900 gram pack" /></span></button>
-          <div class="product-body">
-            <p class="product-kicker"><span data-en>Barnyard millet</span><span data-ml lang="ml">കുതിരവാലി</span></p>
-            <h3 class="product-title"><button class="product-title-link" type="button" data-details="barnyard"><span data-en>Barnyard Millet Kanji Mix</span><span data-ml lang="ml">കുതിരവാലി മില്ലറ്റ് കഞ്ഞി മിക്സ്</span></button></h3>
-            <p class="product-ml">കുതിരവാലി</p>
-            <p class="product-copy"><span data-en>A naturally hearty grain blend with a light, comforting finish.</span><span data-ml lang="ml">ലളിതവും ഹൃദ്യവുമായ രുചിയുള്ള നാടൻ ധാന്യ മിശ്രിതം.</span></p>
-            <div class="product-bottom">
-              <div class="price"><strong>₹600</strong><span>900 g</span></div>
-              <div class="product-actions">
-                <button class="add-btn" type="button" data-product="barnyard"><span data-en>Add to cart</span><span data-ml lang="ml">കാർട്ടിൽ ചേർക്കുക</span></button>
-              </div>
-            </div>
-          </div>
-        </article>
-        <article class="product-card">
-          <button class="product-image-link" type="button" data-details="little" aria-label="View Little Millet Kanji Mix details"><span class="product-image"><img src="assets/ans-little-pro.jpg" alt="ANS Foods Little Millet Kanji Mix in a purple 900 gram pack" /></span></button>
-          <div class="product-body">
-            <p class="product-kicker"><span data-en>Little millet</span><span data-ml lang="ml">ചാമ</span></p>
-            <h3 class="product-title"><button class="product-title-link" type="button" data-details="little"><span data-en>Little Millet Kanji Mix</span><span data-ml lang="ml">ചാമ മില്ലറ്റ് കഞ്ഞി മിക്സ്</span></button></h3>
-            <p class="product-ml">ചാമ</p>
-            <p class="product-copy"><span data-en>A gentle everyday millet blend with a familiar, satisfying texture.</span><span data-ml lang="ml">പരിചിതമായ രുചിയും സംതൃപ്തമായ ഘടനയുമുള്ള ദൈനംദിന മില്ലറ്റ് മിശ്രിതം.</span></p>
-            <div class="product-bottom">
-              <div class="price"><strong>₹600</strong><span>900 g</span></div>
-              <div class="product-actions">
-                <button class="add-btn" type="button" data-product="little"><span data-en>Add to cart</span><span data-ml lang="ml">കാർട്ടിൽ ചേർക്കുക</span></button>
-              </div>
-            </div>
-          </div>
-        </article>
-        <article class="product-card">
-          <button class="product-image-link" type="button" data-details="kodo" aria-label="View Kodo Millet Kanji Mix details"><span class="product-image"><img src="assets/ans-kodo-pro.jpg" alt="ANS Foods Kodo Millet Kanji Mix in a gold 900 gram pack" /></span></button>
-          <div class="product-body">
-            <p class="product-kicker"><span data-en>Kodo millet</span><span data-ml lang="ml">വരക്</span></p>
-            <h3 class="product-title"><button class="product-title-link" type="button" data-details="kodo"><span data-en>Kodo Millet Kanji Mix</span><span data-ml lang="ml">വരക് മില്ലറ്റ് കഞ്ഞി മിക്സ്</span></button></h3>
-            <p class="product-ml">വരക്</p>
-            <p class="product-copy"><span data-en>A robust traditional grain blend for a warm, wholesome bowl.</span><span data-ml lang="ml">ഊഷ്മളവും പോഷകസമൃദ്ധവുമായ കഞ്ഞിക്കായി നാടൻ ധാന്യ മിശ്രിതം.</span></p>
-            <div class="product-bottom">
-              <div class="price"><strong>₹600</strong><span>900 g</span></div>
-              <div class="product-actions">
-                <button class="add-btn" type="button" data-product="kodo"><span data-en>Add to cart</span><span data-ml lang="ml">കാർട്ടിൽ ചേർക്കുക</span></button>
-              </div>
-            </div>
-          </div>
-        </article>
+      <div class="product-grid" id="homeGrid"></div>
       </div>
     </section>
 
@@ -547,28 +502,51 @@
         }
       }
 
+      function renderHomeGrid() {
+        var grid = document.getElementById('homeGrid');
+        if (!grid) return;
+        var ids = Object.keys(products).sort(function (a, b) {
+          return (products[a].featured || 0) - (products[b].featured || 0);
+        });
+        grid.innerHTML = ids.map(function (id) { return ANS.productCardHTML(products[id], language); }).join('');
+        bindProductButtons();
+      }
+      function addToCart(id, btn) {
+        var p = products[id];
+        if (!p) return;
+        if (p.stock <= 0) {
+          showToast(t('Sorry, this item is out of stock.', 'ക്ഷമിക്കണം, ഈ ഉൽപ്പന്നം സ്റ്റോക്കില്ല.'));
+          return;
+        }
+        cart[id] = Math.min(p.stock, (cart[id] || 0) + 1);
+        renderCart();
+        showToast(t('Added to your cart', 'കാർട്ടിൽ ചേർത്തു'));
+        if (btn) {
+          btn.classList.add('is-added');
+          window.setTimeout(function(){ btn.classList.remove('is-added'); }, 650);
+        }
+      }
+      function bindProductButtons() {
+        document.querySelectorAll('.add-btn[data-product]').forEach(function(btn){
+          btn.addEventListener('click', function(){
+            addToCart(btn.getAttribute('data-product'), btn);
+          });
+        });
+        document.querySelectorAll('button[data-details]').forEach(function(btn){
+          btn.addEventListener('click', function(){ openDetail(btn.getAttribute('data-details')); });
+        });
+      }
       document.querySelectorAll('.lang-btn').forEach(function(btn){
         btn.addEventListener('click', function(){
           language = ANS.setLang(btn.getAttribute('data-lang'));
+          renderHomeGrid();
           renderCart();
           renderDetail();
           renderCheckout();
           if (confirmationOverlay.classList.contains('open') && lastOrder) renderConfirmation(lastOrder);
         });
       });
-      document.querySelectorAll('.add-btn[data-product]').forEach(function(btn){
-        btn.addEventListener('click', function(){
-          var id = btn.getAttribute('data-product');
-          cart[id] = (cart[id] || 0) + 1;
-          renderCart();
-          showToast(t('Added to your cart', 'കാർട്ടിൽ ചേർത്തു'));
-          btn.classList.add('is-added');
-          window.setTimeout(function(){ btn.classList.remove('is-added'); }, 650);
-        });
-      });
-      document.querySelectorAll('button[data-details]').forEach(function(btn){
-        btn.addEventListener('click', function(){ openDetail(btn.getAttribute('data-details')); });
-      });
+      renderHomeGrid();
       detailAdd.addEventListener('click', function(){
         if (!activeDetail) return;
         cart[activeDetail] = (cart[activeDetail] || 0) + 1;
@@ -645,6 +623,11 @@
       renderCart();
       renderCheckout();
       if (window.location.hash === '#cart' && totalQty() > 0) openCart();
+      // Pull the live catalog (admin may have added/edited products or stock);
+      // fall back to the built-in list if the API is unreachable.
+      ANS.refreshProducts().then(function (updated) {
+        if (updated) { renderHomeGrid(); renderCart(); renderCheckout(); }
+      });
     })();
   </script>
 </body>

@@ -2,7 +2,8 @@
 // Public storefront API: order creation, payment session, order status.
 const express = require('express');
 const db = require('../db');
-const products = require('../lib/products');
+const productsLib = require('../lib/products');
+const stock = require('../lib/stock');
 const settings = require('../lib/settings');
 const cashfree = require('../lib/cashfree');
 const { notify } = require('../lib/notify');
@@ -24,19 +25,28 @@ function cleanPhone(raw) {
   return /^[6-9]\d{9}$/.test(local) ? local : null;
 }
 
-function validateOrderBody(body) {
+async function validateOrderBody(body) {
   const errors = [];
   const b = body || {};
   const method = b.method;
   if (method !== 'cod' && method !== 'online') errors.push('Invalid payment method.');
+  const products = await productsLib.getAll();
   const items = Array.isArray(b.items) ? b.items : [];
   if (!items.length) errors.push('Cart is empty.');
   const lines = [];
   for (const it of items) {
     const p = products[it && it.id];
     const qty = Number(it && it.qty);
-    if (!p || !Number.isInteger(qty) || qty < 1 || qty > 99) {
+    if (!p || !p.active || !Number.isInteger(qty) || qty < 1 || qty > 99) {
       errors.push('Invalid item in cart.');
+      continue;
+    }
+    if (p.stock <= 0) {
+      errors.push('Sorry, ' + p.nameEn + ' is out of stock.');
+      continue;
+    }
+    if (qty > p.stock) {
+      errors.push('Only ' + p.stock + ' × ' + p.nameEn + ' available right now.');
       continue;
     }
     lines.push({ id: it.id, qty, price_paise: p.pricePaise, name: p.nameEn });
@@ -91,6 +101,23 @@ async function insertOrder(v) {
       }
     }
     if (!orderId) throw new Error('Could not generate order id.');
+    if (v.method === 'cod') {
+      // Take the items out of stock atomically; a concurrent order winning
+      // the race makes this update a no-op and we abort with 409.
+      for (const l of v.lines) {
+        const { rowCount } = await client.query(
+          `UPDATE products SET stock = stock - $2, updated_at = now()
+           WHERE id = $1 AND stock >= $2`,
+          [l.id, l.qty]
+        );
+        if (!rowCount) {
+          const conflict = new Error('Stock changed while placing the order.');
+          conflict.statusCode = 409;
+          throw conflict;
+        }
+      }
+      await client.query(`UPDATE orders SET stock_decremented = true WHERE id = $1`, [orderId]);
+    }
     await client.query('COMMIT');
     const { rows } = await client.query('SELECT * FROM orders WHERE id = $1', [orderId]);
     return { order: rows[0], customerId };
@@ -105,7 +132,7 @@ async function insertOrder(v) {
 // POST /api/orders — create an order (server recomputes the total).
 router.post('/orders', async (req, res) => {
   try {
-    const v = validateOrderBody(req.body);
+    const v = await validateOrderBody(req.body);
     if (v.errors.length) return res.status(400).json({ error: v.errors[0] });
     const { order, customerId } = await insertOrder(v);
     const fullOrder = { ...order, items: v.lines };
@@ -120,7 +147,34 @@ router.post('/orders', async (req, res) => {
     });
   } catch (err) {
     console.error('POST /api/orders:', err.message);
+    if (err.statusCode === 409) {
+      return res.status(409).json({ error: 'Some items just went out of stock. Please review your cart and try again.' });
+    }
     res.status(500).json({ error: 'Could not place the order. Please try again.' });
+  }
+});
+
+// GET /api/products — public catalog for the storefront (active products only).
+router.get('/products', async (req, res) => {
+  try {
+    const all = await productsLib.getAll();
+    const list = Object.values(all)
+      .filter((p) => p.active)
+      .sort((a, b) => a.featured - b.featured)
+      .map((p) => ({
+        id: p.id,
+        nameEn: p.nameEn, nameMl: p.nameMl,
+        grainEn: p.grainEn, grainMl: p.grainMl,
+        shortEn: p.shortEn, shortMl: p.shortMl,
+        copyEn: p.copyEn, copyMl: p.copyMl,
+        image: p.image, type: p.type, featured: p.featured,
+        stock: p.stock,
+        pricePaise: p.pricePaise, price: p.pricePaise / 100,
+      }));
+    res.json({ products: list });
+  } catch (err) {
+    console.error('GET /api/products:', err.message);
+    res.status(500).json({ error: 'Could not load products.' });
   }
 });
 

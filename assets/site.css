@@ -769,3 +769,5 @@
       padding: 8px 12px; border-radius: 999px;
     }
     .nav-link:hover { color: var(--ink); background: color-mix(in srgb, var(--forest) 10%, transparent); }
+    .stock-note { font-size: 12px; color: var(--gold); font-weight: 700; margin: 8px 0 0; }
+    .add-btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
