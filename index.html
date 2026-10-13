@@ -608,6 +608,13 @@
       cursor: pointer;
     }
     .confirm-order-btn:hover { background: var(--forest); }
+    .pay-option { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border: 1px solid var(--line); border-radius: 8px; margin-top: 10px; cursor: pointer; }
+    .pay-option input { margin-top: 2px; width: 18px; height: 18px; accent-color: var(--forest-deep); flex: none; }
+    .pay-option-body strong { display: block; font-size: 15px; }
+    .pay-option-body small { color: var(--muted); font-size: 13px; }
+    .pay-option:has(input:checked) { border-color: var(--forest-deep); background: var(--paper); }
+    .confirmation-order { margin: 0 0 14px; font-size: 14px; color: var(--muted); }
+    .confirmation-order strong { color: var(--ink); letter-spacing: .5px; }
     .checkout-summary {
       position: sticky;
       top: 94px;
@@ -890,7 +897,7 @@
         <div class="story-copy">
           <div class="story-row"><span>01</span><div><h3><span data-en>Choose your millet</span><span data-ml lang="ml">മില്ലറ്റ് തിരഞ്ഞെടുക്കൂ</span></h3><p><span data-en>Pick Barnyard, Little or Kodo Millet Kanji Mix.</span><span data-ml lang="ml">കുതിരവാലി, ചാമ, അല്ലെങ്കിൽ വരക് മില്ലറ്റ് കഞ്ഞി മിക്സ് തിരഞ്ഞെടുക്കുക.</span></p></div></div>
           <div class="story-row"><span>02</span><div><h3><span data-en>Build your order</span><span data-ml lang="ml">ഓർഡർ തയ്യാറാക്കൂ</span></h3><p><span data-en>Adjust the quantity in your cart and review the total.</span><span data-ml lang="ml">കാർട്ടിൽ അളവ് ക്രമീകരിച്ച് ആകെ തുക പരിശോധിക്കുക.</span></p></div></div>
-          <div class="story-row"><span>03</span><div><h3><span data-en>Place your COD order</span><span data-ml lang="ml">COD ഓർഡർ നൽകൂ</span></h3><p><span data-en>Enter your delivery details and place the order. WhatsApp support appears only after the order step is complete.</span><span data-ml lang="ml">ഡെലിവറി വിവരങ്ങൾ നൽകി COD ഓർഡർ നൽകുക. ഓർഡർ ഘട്ടം പൂർത്തിയായ ശേഷമാണ് വാട്ട്‌സ്ആപ്പ് സഹായം ലഭിക്കുക.</span></p></div></div>
+          <div class="story-row"><span>03</span><div><h3><span data-en>Checkout & pay</span><span data-ml lang="ml">പണമടച്ച് ഓർഡർ ചെയ്യൂ</span></h3><p><span data-en>Enter your delivery details and pay online or choose Cash on Delivery. WhatsApp support appears after the order step is complete.</span><span data-ml lang="ml">ഡെലിവറി വിവരങ്ങൾ നൽകി ഓൺലൈനായി പണമടയ്ക്കുകയോ ക്യാഷ് ഓൺ ഡെലിവറി തിരഞ്ഞെടുക്കുകയോ ചെയ്യുക. ഓർഡർ ഘട്ടം പൂർത്തിയായ ശേഷമാണ് വാട്ട്‌സ്ആപ്പ് സഹായം ലഭിക്കുക.</span></p></div></div>
         </div>
       </div>
     </section>
@@ -980,9 +987,22 @@
           <div class="field"><label for="customerDistrict"><span data-en>District</span><span data-ml lang="ml">ജില്ല</span></label><input id="customerDistrict" name="district" autocomplete="address-level2" required /></div>
           <div class="field"><label for="customerPincode"><span data-en>PIN code</span><span data-ml lang="ml">പിൻ കോഡ്</span></label><input id="customerPincode" name="pincode" inputmode="numeric" autocomplete="postal-code" required /></div>
           <div class="payment-panel">
-            <h3><span data-en>Cash on Delivery</span><span data-ml lang="ml">ക്യാഷ് ഓൺ ഡെലിവറി</span></h3>
-            <p><span data-en>Payment is due on delivery. Check your address and order summary, then place your COD order.</span><span data-ml lang="ml">ഡെലിവറി സമയത്താണ് പണം നൽകേണ്ടത്. വിലാസവും ഓർഡർ സംഗ്രഹവും പരിശോധിച്ച് COD ഓർഡർ നൽകുക.</span></p>
-            <button class="confirm-order-btn" type="submit"><span data-en>Place COD order</span><span data-ml lang="ml">COD ഓർഡർ നൽകുക</span></button>
+            <h3><span data-en>Payment method</span><span data-ml lang="ml">പേയ്‌മെന്റ് രീതി</span></h3>
+            <label class="pay-option">
+              <input type="radio" name="paymethod" value="cod" checked />
+              <span class="pay-option-body">
+                <strong><span data-en>Cash on Delivery</span><span data-ml lang="ml">ക്യാഷ് ഓൺ ഡെലിവറി</span></strong>
+                <small><span data-en>Pay when your order arrives.</span><span data-ml lang="ml">ഓർഡർ എത്തുമ്പോൾ പണം നൽകുക.</span></small>
+              </span>
+            </label>
+            <label class="pay-option">
+              <input type="radio" name="paymethod" value="online" />
+              <span class="pay-option-body">
+                <strong><span data-en>Pay online</span><span data-ml lang="ml">ഓൺലൈനായി അടയ്ക്കുക</span></strong>
+                <small><span data-en>UPI, cards and netbanking — secure payment.</span><span data-ml lang="ml">UPI, കാർഡ്, നെറ്റ്ബാങ്കിംഗ് — സുരക്ഷിത പേയ്‌മെന്റ്.</span></small>
+              </span>
+            </label>
+            <button class="confirm-order-btn" type="submit" id="placeOrderBtn"><span data-en>Place order</span><span data-ml lang="ml">ഓർഡർ നൽകുക</span></button>
           </div>
         </form>
       </div>
@@ -990,7 +1010,7 @@
         <h3><span data-en>Order summary</span><span data-ml lang="ml">ഓർഡർ സംഗ്രഹം</span></h3>
         <div id="checkoutSummaryItems"></div>
         <div class="summary-total"><span><span data-en>Total</span><span data-ml lang="ml">ആകെ</span></span><strong id="checkoutTotal">₹0</strong></div>
-        <p class="after-payment"><span data-en>Payment method: Cash on Delivery. Shipping charge and delivery time will be shown for confirmation after you place the order.</span><span data-ml lang="ml">പേയ്‌മെന്റ് രീതി: ക്യാഷ് ഓൺ ഡെലിവറി. ഓർഡർ നൽകിയ ശേഷം ഷിപ്പിംഗ് ചാർജും ഡെലിവറി സമയവും സ്ഥിരീകരിക്കാം.</span></p>
+        <p class="after-payment" id="payMethodNote"><span data-en>Payment method: Cash on Delivery. Shipping charge and delivery time will be shown for confirmation after you place the order.</span><span data-ml lang="ml">പേയ്‌മെന്റ് രീതി: ക്യാഷ് ഓൺ ഡെലിവറി. ഓർഡർ നൽകിയ ശേഷം ഷിപ്പിംഗ് ചാർജും ഡെലിവറി സമയവും സ്ഥിരീകരിക്കാം.</span></p>
       </aside>
     </div>
   </section>
@@ -999,7 +1019,8 @@
     <div class="confirmation-card">
       <div class="confirmation-mark" aria-hidden="true">✓</div>
       <h2 id="confirmationTitle"><span data-en>COD order placed.</span><span data-ml lang="ml">COD ഓർഡർ നൽകി.</span></h2>
-      <p class="confirmation-lead"><span data-en>Your order details are ready. Now connect with ANS Foods on WhatsApp to confirm Cash on Delivery, shipping charges and delivery time.</span><span data-ml lang="ml">ഓർഡർ വിവരങ്ങൾ തയ്യാറാണ്. ക്യാഷ് ഓൺ ഡെലിവറി, ഷിപ്പിംഗ് ചാർജ്, ഡെലിവറി സമയം എന്നിവ സ്ഥിരീകരിക്കാൻ ഇനി ANS Foods-മായി വാട്ട്‌സ്ആപ്പിൽ ബന്ധപ്പെടുക.</span></p>
+      <p class="confirmation-order"><span data-en>Order ID</span><span data-ml lang="ml">ഓർഡർ ID</span>: <strong id="confirmationOrderId">–</strong></p>
+      <p class="confirmation-lead" id="confirmationLead"><span data-en>Your order details are ready. Now connect with ANS Foods on WhatsApp to confirm Cash on Delivery, shipping charges and delivery time.</span><span data-ml lang="ml">ഓർഡർ വിവരങ്ങൾ തയ്യാറാണ്. ക്യാഷ് ഓൺ ഡെലിവറി, ഷിപ്പിംഗ് ചാർജ്, ഡെലിവറി സമയം എന്നിവ സ്ഥിരീകരിക്കാൻ ഇനി ANS Foods-മായി വാട്ട്‌സ്ആപ്പിൽ ബന്ധപ്പെടുക.</span></p>
       <div class="confirmation-summary" id="confirmationSummaryItems"></div>
       <div class="confirmation-total"><span><span data-en>Order total</span><span data-ml lang="ml">ഓർഡർ ആകെ</span></span><strong id="confirmationTotal">₹0</strong></div>
       <a class="whatsapp-btn" id="whatsappConnect" href="https://wa.me/919037138030" target="_blank" rel="noopener">
@@ -1061,6 +1082,76 @@
       var lastFocus = null;
       var activeDetail = null;
 
+      var lastOrder = null;
+
+      /* ============================================================
+         PAYMENT GATEWAY — connect your payment system here.
+         Muhammed: this is the single place your gateway plugs in.
+         1. Set `enabled` to true.
+         2. Implement `startPayment(order, onSuccess, onFailure)`:
+            open your gateway checkout (Razorpay / Cashfree / custom),
+            then call onSuccess(paymentId) when the payment completes,
+            or onFailure(message) if it fails or is cancelled.
+         The `order` object you receive:
+            { id, items: [{id, name, qty, price}], amount (rupees),
+              amountPaise, method: 'cod' | 'online',
+              customer: {name, phone, email, address, district, pincode} }
+         NOTE: real payment verification must happen on a server —
+         never trust the browser alone for confirming money received.
+         ============================================================ */
+      var PaymentGateway = {
+        enabled: false,
+        startPayment: function (order, onSuccess, onFailure) {
+          // TODO (Muhammed): replace this stub with your gateway checkout.
+          onFailure(t('Online payment is not enabled yet.', 'ഓൺലൈൻ പേയ്‌മെന്റ് ഇതുവരെ സജ്ജമാക്കിയിട്ടില്ല.'));
+        }
+      };
+
+      function generateOrderId() {
+        var d = new Date();
+        var ymd = d.getFullYear() + ('0' + (d.getMonth() + 1)).slice(-2) + ('0' + d.getDate()).slice(-2);
+        var rand = Math.random().toString(36).slice(2, 6).toUpperCase();
+        return 'ANS-' + ymd + '-' + rand;
+      }
+
+      function buildOrder(method) {
+        var form = new FormData(checkoutForm);
+        var ids = Object.keys(cart).filter(function(id){ return cart[id] > 0; });
+        var items = ids.map(function(id){
+          var p = products[id];
+          return { id: id, name: t(p.en, p.ml), qty: cart[id], price: p.price };
+        });
+        var amount = totalPrice();
+        return {
+          id: generateOrderId(),
+          items: items,
+          amount: amount,
+          amountPaise: amount * 100,
+          method: method,
+          customer: {
+            name: form.get('name'), phone: form.get('phone'), email: form.get('email'),
+            address: form.get('address'), district: form.get('district'), pincode: form.get('pincode')
+          }
+        };
+      }
+
+      function completeOrder(order, paymentId) {
+        lastOrder = order;
+        Object.keys(cart).forEach(function(id){ delete cart[id]; });
+        renderCart();
+        openConfirmation(order, paymentId);
+      }
+
+      function renderPayNote() {
+        var method = checkoutForm.querySelector('input[name="paymethod"]:checked').value;
+        var note = document.getElementById('payMethodNote');
+        note.innerHTML = '<span>' + esc(method === 'online'
+          ? t('Payment method: Online (UPI, cards, netbanking). You will be taken to the secure payment page after you place the order.',
+               'പേയ്‌മെന്റ് രീതി: ഓൺലൈൻ (UPI, കാർഡ്, നെറ്റ്ബാങ്കിംഗ്). ഓർഡർ നൽകിയ ശേഷം സുരക്ഷിത പേയ്‌മെന്റ് പേജിലേക്ക് പോകും.')
+          : t('Payment method: Cash on Delivery. Shipping charge and delivery time will be shown for confirmation after you place the order.',
+               'പേയ്‌മെന്റ് രീതി: ക്യാഷ് ഓൺ ഡെലിവറി. ഓർഡർ നൽകിയ ശേഷം ഷിപ്പിംഗ് ചാർജും ഡെലിവറി സമയവും സ്ഥിരീകരിക്കാം.')) + '</span>';
+      }
+
       function t(en, ml) { return language === 'ml' ? ml : en; }
       function esc(s) { return String(s).replace(/[&<>'"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]; }); }
       function totalQty() { return Object.keys(cart).reduce(function(sum, id){ return sum + cart[id]; }, 0); }
@@ -1104,27 +1195,38 @@
           return '<div class="summary-item"><span>' + esc(language === 'ml' ? p.ml : p.en) + ' × ' + cart[id] + '</span><strong>₹' + (p.price * cart[id]).toLocaleString('en-IN') + '</strong></div>';
         }).join('');
         checkoutTotal.textContent = '₹' + totalPrice().toLocaleString('en-IN');
+        renderPayNote();
       }
 
-      function renderConfirmation() {
-        var ids = Object.keys(cart).filter(function(id){ return cart[id] > 0; });
-        confirmationSummaryItems.innerHTML = ids.map(function(id){
-          var p = products[id];
-          return '<div class="summary-item"><span>' + esc(language === 'ml' ? p.ml : p.en) + ' × ' + cart[id] + '</span><strong>₹' + (p.price * cart[id]).toLocaleString('en-IN') + '</strong></div>';
+      function renderConfirmation(order, paymentId) {
+        var paidOnline = order.method === 'online';
+        document.getElementById('confirmationOrderId').textContent = order.id;
+        document.getElementById('confirmationTitle').innerHTML = '<span>' + esc(paidOnline
+          ? t('Payment successful — order placed.', 'പേയ്‌മെന്റ് വിജയകരം — ഓർഡർ നൽകി.')
+          : t('COD order placed.', 'COD ഓർഡർ നൽകി.')) + '</span>';
+        document.getElementById('confirmationLead').innerHTML = '<span>' + esc(paidOnline
+          ? t('Your payment is confirmed and your order is with ANS Foods. Connect on WhatsApp if you need help with shipping and delivery time.',
+               'നിങ്ങളുടെ പേയ്‌മെന്റ് സ്ഥിരീകരിച്ചു, ഓർഡർ ANS Foods-ന് ലഭിച്ചു. ഷിപ്പിംഗിനും ഡെലിവറി സമയത്തിനും സഹായം വേണമെങ്കിൽ വാട്ട്‌സ്ആപ്പിൽ ബന്ധപ്പെടുക.')
+          : t('Your order details are ready. Now connect with ANS Foods on WhatsApp to confirm Cash on Delivery, shipping charges and delivery time.',
+               'ഓർഡർ വിവരങ്ങൾ തയ്യാറാണ്. ക്യാഷ് ഓൺ ഡെലിവറി, ഷിപ്പിംഗ് ചാർജ്, ഡെലിവറി സമയം എന്നിവ സ്ഥിരീകരിക്കാൻ ഇനി ANS Foods-മായി വാട്ട്‌സ്ആപ്പിൽ ബന്ധപ്പെടുക.')) + '</span>';
+        confirmationSummaryItems.innerHTML = order.items.map(function(it){
+          return '<div class="summary-item"><span>' + esc(it.name) + ' × ' + it.qty + '</span><strong>₹' + (it.price * it.qty).toLocaleString('en-IN') + '</strong></div>';
         }).join('');
-        confirmationTotal.textContent = '₹' + totalPrice().toLocaleString('en-IN');
+        confirmationTotal.textContent = '₹' + order.amount.toLocaleString('en-IN');
 
-        var form = new FormData(checkoutForm);
-        var itemLines = ids.map(function(id){
-          var p = products[id];
-          return '• ' + (language === 'ml' ? p.ml : p.en) + ' × ' + cart[id] + ' — ₹' + (p.price * cart[id]).toLocaleString('en-IN');
+        var itemLines = order.items.map(function(it){
+          return '• ' + it.name + ' × ' + it.qty + ' — ₹' + (it.price * it.qty).toLocaleString('en-IN');
         });
+        var payLineMl = paidOnline ? 'പേയ്‌മെന്റ്: ഓൺലൈൻ (വിജയകരം)' : 'പേയ്‌മെന്റ്: ക്യാഷ് ഓൺ ഡെലിവറി';
+        var payLineEn = paidOnline ? 'Payment: Online (successful)' : 'Payment: Cash on Delivery';
+        var c = order.customer;
+        var addrLine = c.address + ', ' + c.district + ' - ' + c.pincode;
+        var payRef = (paidOnline && paymentId) ? '\n' + (language === 'ml' ? 'പേയ്‌മെന്റ് ID: ' : 'Payment ID: ') + paymentId : '';
         var message = language === 'ml'
-          ? 'നമസ്കാരം ANS Foods, ഞാൻ ഈ COD ഓർഡർ നൽകി:\n\n' + itemLines.join('\n') + '\n\nആകെ: ₹' + totalPrice().toLocaleString('en-IN') + '\nപേയ്‌മെന്റ്: ക്യാഷ് ഓൺ ഡെലിവറി\nപേര്: ' + form.get('name') + '\nഫോൺ: ' + form.get('phone') + '\nവിലാസം: ' + form.get('address') + ', ' + form.get('district') + ' - ' + form.get('pincode') + '\n\nCOD, ഷിപ്പിംഗ് ചാർജ്, ഡെലിവറി സമയം എന്നിവ സ്ഥിരീകരിക്കുക.'
-          : 'Hello ANS Foods, I have placed this COD order:\n\n' + itemLines.join('\n') + '\n\nTotal: ₹' + totalPrice().toLocaleString('en-IN') + '\nPayment: Cash on Delivery\nName: ' + form.get('name') + '\nPhone: ' + form.get('phone') + '\nAddress: ' + form.get('address') + ', ' + form.get('district') + ' - ' + form.get('pincode') + '\n\nPlease confirm COD, shipping charges and delivery time.';
+          ? 'നമസ്കാരം ANS Foods, ഞാൻ ഈ ഓർഡർ നൽകി:\n\n' + itemLines.join('\n') + '\n\nഓർഡർ ID: ' + order.id + '\nആകെ: ₹' + order.amount.toLocaleString('en-IN') + '\n' + payLineMl + '\nപേര്: ' + c.name + '\nഫോൺ: ' + c.phone + '\nവിലാസം: ' + addrLine + payRef + '\n\nഷിപ്പിംഗ് ചാർജ്, ഡെലിവറി സമയം എന്നിവ സ്ഥിരീകരിക്കുക.'
+          : 'Hello ANS Foods, I have placed this order:\n\n' + itemLines.join('\n') + '\n\nOrder ID: ' + order.id + '\nTotal: ₹' + order.amount.toLocaleString('en-IN') + '\n' + payLineEn + '\nName: ' + c.name + '\nPhone: ' + c.phone + '\nAddress: ' + addrLine + payRef + '\n\nPlease confirm shipping charges and delivery time.';
         whatsappConnect.href = 'https://wa.me/919037138030?text=' + encodeURIComponent(message);
       }
-
       function renderDetail() {
         if (!activeDetail) return;
         var p = products[activeDetail];
@@ -1186,8 +1288,8 @@
         if (reopenCart) openCart();
         else if (lastFocus) lastFocus.focus();
       }
-      function openConfirmation() {
-        renderConfirmation();
+      function openConfirmation(order, paymentId) {
+        renderConfirmation(order, paymentId);
         checkoutOverlay.classList.remove('open');
         checkoutOverlay.setAttribute('aria-hidden', 'true');
         confirmationOverlay.classList.add('open');
@@ -1219,7 +1321,7 @@
           renderCart();
           renderDetail();
           renderCheckout();
-          if (confirmationOverlay.classList.contains('open')) renderConfirmation();
+          if (confirmationOverlay.classList.contains('open') && lastOrder) renderConfirmation(lastOrder);
         });
       });
       document.querySelectorAll('.add-btn[data-product]').forEach(function(btn){
@@ -1266,7 +1368,35 @@
       checkoutForm.addEventListener('submit', function(e){
         e.preventDefault();
         if (!checkoutForm.reportValidity()) return;
-        openConfirmation();
+        var method = checkoutForm.querySelector('input[name="paymethod"]:checked').value;
+        if (method === 'online' && !PaymentGateway.enabled) {
+          showToast(t('Online payment is coming soon — please choose Cash on Delivery.',
+                       'ഓൺലൈൻ പേയ്‌മെന്റ് ഉടൻ ലഭ്യമാകും — ക്യാഷ് ഓൺ ഡെലിവറി തിരഞ്ഞെടുക്കുക.'));
+          return;
+        }
+        var order = buildOrder(method);
+        if (method === 'online') {
+          var btn = document.getElementById('placeOrderBtn');
+          var origLabel = btn.innerHTML;
+          btn.disabled = true;
+          btn.innerHTML = '<span>' + esc(t('Processing payment…', 'പേയ്‌മെന്റ് നടക്കുന്നു…')) + '</span>';
+          PaymentGateway.startPayment(order,
+            function(paymentId){
+              btn.disabled = false;
+              btn.innerHTML = origLabel;
+              completeOrder(order, paymentId);
+            },
+            function(message){
+              btn.disabled = false;
+              btn.innerHTML = origLabel;
+              showToast(message || t('Payment failed. Please try again.', 'പേയ്‌മെന്റ് പരാജയപ്പെട്ടു. വീണ്ടും ശ്രമിക്കുക.'));
+            });
+        } else {
+          completeOrder(order, null);
+        }
+      });
+      checkoutForm.querySelectorAll('input[name="paymethod"]').forEach(function(radio){
+        radio.addEventListener('change', renderPayNote);
       });
       document.querySelector('.confirmation-back').addEventListener('click', function(){ closeConfirmation(true); });
       document.querySelector('.confirmation-close').addEventListener('click', function(){ closeConfirmation(false); });
