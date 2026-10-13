@@ -1085,27 +1085,40 @@
       var lastOrder = null;
 
       /* ============================================================
-         PAYMENT GATEWAY — connect your payment system here.
-         Muhammed: this is the single place your gateway plugs in.
-         1. Set `enabled` to true.
-         2. Implement `startPayment(order, onSuccess, onFailure)`:
-            open your gateway checkout (Razorpay / Cashfree / custom),
-            then call onSuccess(paymentId) when the payment completes,
-            or onFailure(message) if it fails or is cancelled.
-         The `order` object you receive:
-            { id, items: [{id, name, qty, price}], amount (rupees),
-              amountPaise, method: 'cod' | 'online',
-              customer: {name, phone, email, address, district, pincode} }
-         NOTE: real payment verification must happen on a server —
-         never trust the browser alone for confirming money received.
+         ONLINE PAYMENTS — server-backed via Cashfree.
+         The browser never handles keys: /api/payments/session creates a
+         Cashfree payment session using the keys stored in /admin/.
+         Cashfree's own checkout page collects the payment, then redirects
+         to order-status.html, which polls /api/orders/:id.
          ============================================================ */
-      var PaymentGateway = {
-        enabled: false,
-        startPayment: function (order, onSuccess, onFailure) {
-          // TODO (Muhammed): replace this stub with your gateway checkout.
-          onFailure(t('Online payment is not enabled yet.', 'ഓൺലൈൻ പേയ്‌മെന്റ് ഇതുവരെ സജ്ജമാക്കിയിട്ടില്ല.'));
-        }
-      };
+      var cashfreeSdkPromise = null;
+      function loadCashfreeSdk() {
+        if (cashfreeSdkPromise) return cashfreeSdkPromise;
+        cashfreeSdkPromise = new Promise(function(resolve, reject){
+          var s = document.createElement('script');
+          s.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
+          s.onload = function(){ resolve(); };
+          s.onerror = function(){ reject(new Error('sdk')); };
+          document.head.appendChild(s);
+        });
+        return cashfreeSdkPromise;
+      }
+      function postJSON(url, data) {
+        return fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+          .then(function(r){ return r.json().then(function(j){ return { ok: r.ok, body: j }; }); })
+          .then(function(r){ if (!r.ok) throw new Error(r.body.error || 'Request failed'); return r.body; });
+      }
+      function collectCheckout() {
+        var form = new FormData(checkoutForm);
+        return {
+          customer: {
+            name: form.get('name'), phone: form.get('phone'), email: form.get('email') || '',
+            address: form.get('address'), district: form.get('district'), pincode: form.get('pincode')
+          },
+          items: Object.keys(cart).filter(function(id){ return cart[id] > 0; })
+            .map(function(id){ return { id: id, qty: cart[id] }; })
+        };
+      }
 
       function generateOrderId() {
         var d = new Date();
@@ -1114,19 +1127,20 @@
         return 'ANS-' + ymd + '-' + rand;
       }
 
-      function buildOrder(method) {
+      function buildOrder(method, server) {
         var form = new FormData(checkoutForm);
         var ids = Object.keys(cart).filter(function(id){ return cart[id] > 0; });
         var items = ids.map(function(id){
           var p = products[id];
           return { id: id, name: t(p.en, p.ml), qty: cart[id], price: p.price };
         });
-        var amount = totalPrice();
+        // The server is the source of truth for the order id and total.
+        var amountPaise = server ? server.amountPaise : totalPrice() * 100;
         return {
-          id: generateOrderId(),
+          id: server ? server.orderId : generateOrderId(),
           items: items,
-          amount: amount,
-          amountPaise: amount * 100,
+          amount: amountPaise / 100,
+          amountPaise: amountPaise,
           method: method,
           customer: {
             name: form.get('name'), phone: form.get('phone'), email: form.get('email'),
@@ -1134,7 +1148,6 @@
           }
         };
       }
-
       function completeOrder(order, paymentId) {
         lastOrder = order;
         Object.keys(cart).forEach(function(id){ delete cart[id]; });
@@ -1369,31 +1382,34 @@
         e.preventDefault();
         if (!checkoutForm.reportValidity()) return;
         var method = checkoutForm.querySelector('input[name="paymethod"]:checked').value;
-        if (method === 'online' && !PaymentGateway.enabled) {
-          showToast(t('Online payment is coming soon — please choose Cash on Delivery.',
-                       'ഓൺലൈൻ പേയ്‌മെന്റ് ഉടൻ ലഭ്യമാകും — ക്യാഷ് ഓൺ ഡെലിവറി തിരഞ്ഞെടുക്കുക.'));
-          return;
+        var btn = document.getElementById('placeOrderBtn');
+        var origLabel = btn.innerHTML;
+        function setBusy(busy, labelEn, labelMl) {
+          btn.disabled = busy;
+          btn.innerHTML = busy ? '<span>' + esc(t(labelEn, labelMl)) + '</span>' : origLabel;
         }
-        var order = buildOrder(method);
-        if (method === 'online') {
-          var btn = document.getElementById('placeOrderBtn');
-          var origLabel = btn.innerHTML;
-          btn.disabled = true;
-          btn.innerHTML = '<span>' + esc(t('Processing payment…', 'പേയ്‌മെന്റ് നടക്കുന്നു…')) + '</span>';
-          PaymentGateway.startPayment(order,
-            function(paymentId){
-              btn.disabled = false;
-              btn.innerHTML = origLabel;
-              completeOrder(order, paymentId);
-            },
-            function(message){
-              btn.disabled = false;
-              btn.innerHTML = origLabel;
-              showToast(message || t('Payment failed. Please try again.', 'പേയ്‌മെന്റ് പരാജയപ്പെട്ടു. വീണ്ടും ശ്രമിക്കുക.'));
+        var payload = collectCheckout();
+        payload.method = method;
+        setBusy(true, 'Placing your order…', 'ഓർഡർ നൽകുന്നു…');
+        postJSON('/api/orders', payload).then(function(created){
+          if (method === 'cod') {
+            var snap = buildOrder('cod', created);
+            setBusy(false);
+            completeOrder(snap, null);
+            return null;
+          }
+          // Online: ask the server for a Cashfree session, then hand off.
+          return postJSON('/api/payments/session', { orderId: created.orderId }).then(function(sess){
+            return loadCashfreeSdk().then(function(){
+              setBusy(false);
+              var cf = Cashfree({ mode: sess.environment === 'production' ? 'production' : 'sandbox' });
+              cf.checkout({ paymentSessionId: sess.paymentSessionId, redirectTarget: '_self' });
             });
-        } else {
-          completeOrder(order, null);
-        }
+          });
+        }).catch(function(err){
+          setBusy(false);
+          showToast(err.message || t('Could not place the order. Please try again.', 'ഓർഡർ നൽകാനായില്ല. വീണ്ടും ശ്രമിക്കുക.'));
+        });
       });
       checkoutForm.querySelectorAll('input[name="paymethod"]').forEach(function(radio){
         radio.addEventListener('change', renderPayNote);

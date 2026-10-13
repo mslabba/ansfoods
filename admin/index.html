@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ANS Foods — Admin</title>
+<style>
+  :root { --ink:#2b2620; --muted:#7a6f62; --line:#e7ddcf; --paper:#fbf8f2; --card:#fffdf9;
+          --forest:#2f5d3a; --forest-deep:#234a2d; --gold:#b98a2f; --red:#a33b2e; --green:#2e7d43; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; background:var(--paper); color:var(--ink); }
+  .wrap { max-width:1080px; margin:0 auto; padding:24px 16px 64px; }
+  h1 { font-size:24px; margin:0 0 4px; }
+  .sub { color:var(--muted); margin:0 0 24px; font-size:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:20px; margin-bottom:18px; }
+  .login-card { max-width:400px; margin:80px auto; }
+  label { display:block; font-size:13px; font-weight:600; margin:14px 0 6px; }
+  input, select, textarea { width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:6px; font-size:14px; background:#fff; }
+  input:focus, select:focus { outline:2px solid var(--forest); outline-offset:-1px; }
+  button { cursor:pointer; }
+  .btn { background:var(--forest-deep); color:#fff; border:0; border-radius:6px; padding:11px 18px; font-size:14px; font-weight:700; }
+  .btn:hover { background:var(--forest); }
+  .btn-ghost { background:none; border:1px solid var(--line); border-radius:6px; padding:9px 14px; font-size:13px; }
+  .btn-danger-ghost { background:none; border:1px solid var(--red); color:var(--red); border-radius:6px; padding:9px 14px; font-size:13px; }
+  .err { color:var(--red); font-size:13px; min-height:20px; margin:8px 0 0; }
+  .okmsg { color:var(--green); font-size:13px; min-height:20px; margin:8px 0 0; }
+  .tabs { display:flex; gap:8px; margin-bottom:18px; }
+  .tab { border:1px solid var(--line); background:var(--card); border-radius:8px; padding:10px 18px; font-size:14px; font-weight:600; }
+  .tab.active { background:var(--forest-deep); color:#fff; border-color:var(--forest-deep); }
+  .hidden { display:none !important; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th, td { text-align:left; padding:10px 8px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { color:var(--muted); font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:.4px; }
+  tr.rowlink { cursor:pointer; }
+  tr.rowlink:hover td { background:#f6f1e7; }
+  .pill { display:inline-block; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:700; }
+  .pill.pending { background:#fdf3d7; color:#8a6d1a; }
+  .pill.confirmed { background:#e3ecff; color:#2b4d9b; }
+  .pill.paid { background:#dff0e3; color:var(--green); }
+  .pill.shipped { background:#e8e0f5; color:#5b3d99; }
+  .pill.cancelled, .pill.failed { background:#f9e2de; color:var(--red); }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:0 18px; }
+  @media (max-width:640px){ .grid2 { grid-template-columns:1fr; } table { font-size:12px; } }
+  .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+  .secret-note { font-size:12px; color:var(--muted); margin-top:4px; }
+  .badge { display:inline-block; font-size:11px; font-weight:700; padding:2px 8px; border-radius:12px; background:#dff0e3; color:var(--green); margin-left:8px; }
+  .badge.off { background:#f1ece2; color:var(--muted); }
+  .detail-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+  .kv { display:grid; grid-template-columns:150px 1fr; gap:6px 12px; font-size:14px; margin:12px 0; }
+  .kv dt { color:var(--muted); } .kv dd { margin:0; }
+  .toolbar { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+  h2 { font-size:18px; margin:0 0 6px; }
+  h3 { font-size:15px; margin:22px 0 4px; }
+  .hint { font-size:13px; color:var(--muted); margin:0 0 8px; }
+  code { background:#f1ece2; padding:2px 6px; border-radius:4px; font-size:12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- LOGIN -->
+  <div class="card login-card" id="loginView">
+    <h1>ANS Foods Admin</h1>
+    <p class="sub">Sign in to manage orders and settings.</p>
+    <label for="loginEmail">Email</label>
+    <input id="loginEmail" type="email" autocomplete="username" />
+    <label for="loginPass">Password</label>
+    <input id="loginPass" type="password" autocomplete="current-password" />
+    <p class="err" id="loginErr"></p>
+    <button class="btn" id="loginBtn" style="width:100%;margin-top:8px;">Sign in</button>
+  </div>
+
+  <!-- APP -->
+  <div id="appView" class="hidden">
+    <div class="topbar">
+      <div><h1>ANS Foods Admin</h1><p class="sub" id="adminEmailLine"></p></div>
+      <button class="btn-ghost" id="logoutBtn">Sign out</button>
+    </div>
+    <div class="tabs">
+      <button class="tab active" data-tab="orders">Orders</button>
+      <button class="tab" data-tab="settings">Settings</button>
+      <button class="tab" data-tab="security">Security</button>
+    </div>
+
+    <div id="tab-orders">
+      <div class="card">
+        <h2>Orders</h2>
+        <p class="hint">Newest first. Click a row for details.</p>
+        <div style="overflow-x:auto;"><table>
+          <thead><tr><th>Order</th><th>Date</th><th>Customer</th><th>Items</th><th>Amount</th><th>Method</th><th>Status</th></tr></thead>
+          <tbody id="ordersBody"></tbody>
+        </table></div>
+        <p class="err" id="ordersErr"></p>
+      </div>
+      <div class="card hidden" id="orderDetail">
+        <div class="detail-head">
+          <h2 id="detailTitle">Order</h2>
+          <button class="btn-ghost" id="detailClose">Close</button>
+        </div>
+        <div id="detailBody"></div>
+      </div>
+    </div>
+
+    <div id="tab-settings" class="hidden">
+      <div class="card">
+        <h2>Cashfree payment gateway</h2>
+        <p class="hint">Keys are stored in the database — never in code. Leave a secret blank to keep the existing value. Get keys from the <a href="https://www.cashfree.com/" target="_blank" rel="noopener">Cashfree dashboard</a>.</p>
+        <div class="grid2">
+          <div><label for="set_cashfree_app_id">App ID</label><input id="set_cashfree_app_id" /></div>
+          <div><label for="set_cashfree_env">Environment</label>
+            <select id="set_cashfree_env"><option value="sandbox">Sandbox (testing)</option><option value="production">Production (real money)</option></select></div>
+        </div>
+        <label for="set_cashfree_secret_key">Secret key <span class="badge off" id="badge_cf">not set</span></label>
+        <input id="set_cashfree_secret_key" type="password" autocomplete="off" placeholder="Leave blank to keep existing" />
+        <p class="secret-note">Cashfree webhooks must reach <code>POST /api/webhooks/cashfree</code> over public HTTPS for automatic payment confirmation.</p>
+      </div>
+      <div class="card">
+        <h2>Email alerts</h2>
+        <p class="hint">An email goes to the store on every new COD order and every successful online payment.</p>
+        <div class="grid2">
+          <div><label for="set_alert_email">Alert email (store owner)</label><input id="set_alert_email" type="email" /></div>
+          <div><label for="set_smtp_from">From address</label><input id="set_smtp_from" /></div>
+          <div><label for="set_smtp_host">SMTP host</label><input id="set_smtp_host" placeholder="smtp.gmail.com" /></div>
+          <div><label for="set_smtp_port">SMTP port</label><input id="set_smtp_port" placeholder="587" /></div>
+          <div><label for="set_smtp_user">SMTP username</label><input id="set_smtp_user" /></div>
+          <div><label for="set_smtp_pass">SMTP password <span class="badge off" id="badge_smtp">not set</span></label>
+            <input id="set_smtp_pass" type="password" autocomplete="off" placeholder="Leave blank to keep existing" /></div>
+        </div>
+        <label style="margin-top:14px;"><input type="checkbox" id="set_smtp_secure" style="width:auto;" /> Use SSL (port 465)</label>
+      </div>
+      <div class="card">
+        <h2>Store</h2>
+        <div class="grid2">
+          <div><label for="set_store_name">Store name</label><input id="set_store_name" /></div>
+          <div><label for="set_store_phone">Store phone / WhatsApp</label><input id="set_store_phone" /></div>
+        </div>
+        <p class="okmsg" id="settingsMsg"></p>
+        <p class="err" id="settingsErr"></p>
+        <button class="btn" id="saveSettingsBtn">Save settings</button>
+      </div>
+    </div>
+
+    <div id="tab-security" class="hidden">
+      <div class="card">
+        <h2>Change password</h2>
+        <label for="pwCurrent">Current password</label><input id="pwCurrent" type="password" autocomplete="current-password" />
+        <label for="pwNext">New password (min 8 characters)</label><input id="pwNext" type="password" autocomplete="new-password" />
+        <p class="okmsg" id="pwMsg"></p><p class="err" id="pwErr"></p>
+        <button class="btn" id="pwBtn">Change password</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var $ = function(id){ return document.getElementById(id); };
+  function api(path, opts){
+    opts = opts || {};
+    opts.headers = Object.assign({ 'Content-Type': 'application/json' }, opts.headers || {});
+    return fetch(path, opts).then(function(r){
+      return r.json().then(function(j){ return { ok: r.ok, status: r.status, body: j }; });
+    });
+  }
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>'"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]; }); }
+  function money(paise){ return '₹' + (paise/100).toLocaleString('en-IN'); }
+  function fmtDate(iso){ try { return new Date(iso).toLocaleString('en-IN'); } catch(e){ return iso; } }
+
+  // ---------- login ----------
+  function showApp(email){
+    $('loginView').classList.add('hidden');
+    $('appView').classList.remove('hidden');
+    $('adminEmailLine').textContent = email || '';
+    loadOrders(); loadSettings();
+  }
+  function doLogin(){
+    $('loginErr').textContent = '';
+    api('/api/admin/login', { method:'POST', body: JSON.stringify({ email: $('loginEmail').value, password: $('loginPass').value }) })
+      .then(function(r){
+        if (!r.ok) { $('loginErr').textContent = r.body.error || 'Login failed.'; return; }
+        $('loginPass').value = '';
+        showApp(r.body.email);
+      }).catch(function(){ $('loginErr').textContent = 'Could not reach the server.'; });
+  }
+  $('loginBtn').addEventListener('click', doLogin);
+  $('loginPass').addEventListener('keydown', function(e){ if (e.key === 'Enter') doLogin(); });
+  $('logoutBtn').addEventListener('click', function(){
+    api('/api/admin/logout', { method:'POST' }).finally(function(){ location.reload(); });
+  });
+  api('/api/admin/me').then(function(r){ if (r.ok) showApp(r.body.email); });
+
+  // ---------- tabs ----------
+  document.querySelectorAll('.tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+      tab.classList.add('active');
+      ['orders','settings','security'].forEach(function(name){
+        $('tab-'+name).classList.toggle('hidden', name !== tab.getAttribute('data-tab'));
+      });
+    });
+  });
+
+  // ---------- orders ----------
+  var ordersCache = {};
+  function statusPill(s){ return '<span class="pill ' + esc(s) + '">' + esc(s) + '</span>'; }
+  function loadOrders(){
+    api('/api/admin/orders?limit=100').then(function(r){
+      if (r.status === 401) { location.reload(); return; }
+      if (!r.ok) { $('ordersErr').textContent = r.body.error || 'Failed.'; return; }
+      ordersCache = {};
+      $('ordersBody').innerHTML = r.body.orders.map(function(o){
+        ordersCache[o.id] = o;
+        var items = (o.items || []).map(function(it){ return esc(it.name) + ' × ' + it.qty; }).join(', ');
+        return '<tr class="rowlink" data-id="' + esc(o.id) + '"><td><code>' + esc(o.id) + '</code></td>' +
+          '<td>' + esc(fmtDate(o.created_at)) + '</td>' +
+          '<td>' + esc(o.customer_name) + '<br/><span style="color:#7a6f62">' + esc(o.customer_phone) + '</span></td>' +
+          '<td>' + esc(items) + '</td>' +
+          '<td>' + money(o.amount_paise) + '</td>' +
+          '<td>' + esc(o.method) + '</td>' +
+          '<td>' + statusPill(o.status) + '</td></tr>';
+      }).join('') || '<tr><td colspan="7" style="color:#7a6f62">No orders yet.</td></tr>';
+      document.querySelectorAll('#ordersBody tr.rowlink').forEach(function(tr){
+        tr.addEventListener('click', function(){ openDetail(tr.getAttribute('data-id')); });
+      });
+    });
+  }
+  function openDetail(id){
+    api('/api/admin/orders/' + encodeURIComponent(id)).then(function(r){
+      if (!r.ok) return;
+      var o = r.body.order, pays = r.body.payments;
+      var items = (o.items || []).map(function(it){
+        return '<tr><td>' + esc(it.name) + '</td><td>' + it.qty + '</td><td>' + money(it.price_paise * it.qty) + '</td></tr>';
+      }).join('');
+      var payRows = pays.map(function(p){
+        return '<tr><td>' + p.id + '</td><td>' + esc(p.gateway) + '</td><td>' + esc(p.gateway_payment_id || '—') +
+          '</td><td>' + statusPill(p.status) + '</td><td>' + esc(fmtDate(p.created_at)) + '</td></tr>';
+      }).join('') || '<tr><td colspan="5" style="color:#7a6f62">No payment attempts.</td></tr>';
+      $('detailTitle').innerHTML = 'Order <code>' + esc(o.id) + '</code> ' + statusPill(o.status);
+      $('detailBody').innerHTML =
+        '<dl class="kv">' +
+        '<dt>Customer</dt><dd>' + esc(o.customer_name) + ' · ' + esc(o.customer_phone) + (o.customer_email ? ' · ' + esc(o.customer_email) : '') + '</dd>' +
+        '<dt>Address</dt><dd>' + esc(o.customer_address) + ', ' + esc(o.customer_district) + ' – ' + esc(o.customer_pincode) + '</dd>' +
+        '<dt>Placed</dt><dd>' + esc(fmtDate(o.created_at)) + '</dd>' +
+        '<dt>Method</dt><dd>' + esc(o.method) + '</dd>' +
+        '<dt>Total</dt><dd><strong>' + money(o.amount_paise) + '</strong></dd>' +
+        '</dl>' +
+        '<h3>Items</h3><table><thead><tr><th>Item</th><th>Qty</th><th>Amount</th></tr></thead><tbody>' + items + '</tbody></table>' +
+        '<h3>Payments</h3><table><thead><tr><th>#</th><th>Gateway</th><th>Payment ID</th><th>Status</th><th>At</th></tr></thead><tbody>' + payRows + '</tbody></table>' +
+        '<div class="toolbar">' +
+          '<select id="statusSel">' + ['pending','confirmed','paid','shipped','cancelled','failed'].map(function(s){
+            return '<option value="' + s + '"' + (o.status === s ? ' selected' : '') + '>' + s + '</option>';
+          }).join('') + '</select>' +
+          '<button class="btn" id="statusSave">Update status</button>' +
+          (o.method === 'online' && o.status === 'pending' ? '<button class="btn-ghost" id="syncPay">Sync payment from Cashfree</button>' : '') +
+        '</div><p class="err" id="detailErr"></p><p class="okmsg" id="detailOk"></p>';
+      $('orderDetail').classList.remove('hidden');
+      $('orderDetail').scrollIntoView({ block:'nearest' });
+      $('statusSave').addEventListener('click', function(){
+        api('/api/admin/orders/' + encodeURIComponent(id), { method:'PATCH', body: JSON.stringify({ status: $('statusSel').value }) })
+          .then(function(r){
+            if (!r.ok) { $('detailErr').textContent = r.body.error; return; }
+            $('detailOk').textContent = 'Status updated.'; loadOrders(); openDetail(id);
+          });
+      });
+      var syncBtn = $('syncPay');
+      if (syncBtn) syncBtn.addEventListener('click', function(){
+        syncBtn.disabled = true; syncBtn.textContent = 'Syncing…';
+        api('/api/admin/orders/' + encodeURIComponent(id) + '/sync-payment', { method:'POST' })
+          .then(function(r){
+            if (!r.ok) { $('detailErr').textContent = r.body.error; }
+            else { $('detailOk').textContent = 'Cashfree status: ' + r.body.orderStatus + '. Marked: ' + r.body.marked + '.'; }
+            loadOrders(); openDetail(id);
+          });
+      });
+    });
+  }
+  $('detailClose').addEventListener('click', function(){ $('orderDetail').classList.add('hidden'); });
+
+  // ---------- settings ----------
+  var SETTING_FIELDS = ['cashfree_app_id','cashfree_secret_key','cashfree_env','alert_email','smtp_host','smtp_port','smtp_user','smtp_pass','smtp_from','store_name','store_phone'];
+  function loadSettings(){
+    api('/api/admin/settings').then(function(r){
+      if (!r.ok || r.status === 401) return;
+      var s = r.body.settings || {};
+      SETTING_FIELDS.forEach(function(k){
+        var el = $('set_' + k); if (!el) return;
+        var v = s[k];
+        if (v && typeof v === 'object' && 'set' in v) {
+          var badge = $('badge_' + (k === 'cashfree_secret_key' ? 'cf' : 'smtp'));
+          if (badge) { badge.textContent = v.set ? ('set · ' + v.masked) : 'not set'; badge.classList.toggle('off', !v.set); }
+          el.placeholder = v.set ? '•••• (set — leave blank to keep)' : el.placeholder;
+        } else if (v && 'value' in v) {
+          if (el.tagName === 'SELECT') el.value = v.value || 'sandbox';
+          else el.value = v.value;
+        }
+      });
+      var sec = s.smtp_secure;
+      if (sec && sec.value) $('set_smtp_secure').checked = sec.value === 'true';
+    });
+  }
+  $('saveSettingsBtn').addEventListener('click', function(){
+    $('settingsErr').textContent = ''; $('settingsMsg').textContent = '';
+    var payload = {};
+    SETTING_FIELDS.forEach(function(k){
+      var el = $('set_' + k); if (el) payload[k] = el.value;
+    });
+    payload.smtp_secure = $('set_smtp_secure').checked ? 'true' : 'false';
+    api('/api/admin/settings', { method:'PUT', body: JSON.stringify({ settings: payload }) })
+      .then(function(r){
+        if (!r.ok) { $('settingsErr').textContent = r.body.error || 'Save failed.'; return; }
+        $('settingsMsg').textContent = 'Settings saved (' + (r.body.changed || []).length + ' fields updated).';
+        loadSettings();
+      }).catch(function(){ $('settingsErr').textContent = 'Could not reach the server.'; });
+  });
+
+  // ---------- password ----------
+  $('pwBtn').addEventListener('click', function(){
+    $('pwErr').textContent = ''; $('pwMsg').textContent = '';
+    api('/api/admin/password', { method:'POST', body: JSON.stringify({ current: $('pwCurrent').value, next: $('pwNext').value }) })
+      .then(function(r){
+        if (!r.ok) { $('pwErr').textContent = r.body.error || 'Failed.'; return; }
+        $('pwMsg').textContent = 'Password changed.';
+        $('pwCurrent').value = ''; $('pwNext').value = '';
+      });
+  });
+})();
+</script>
+</body>
+</html>

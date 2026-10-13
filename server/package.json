@@ -1,0 +1,1 @@
+{"dependencies":{"express":"^4.19.2","nodemailer":"^6.9.14","pg":"^8.12.0"},"description":"ANS Foods e-commerce backend: orders, Cashfree payments, admin, email alerts","engines":{"node":">=20"},"main":"src/index.js","name":"ansfoods-server","private":true,"scripts":{"start":"node src/index.js"},"version":"1.0.0"}
