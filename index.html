@@ -6,7 +6,8 @@
   <meta name="color-scheme" content="light dark" />
   <meta name="theme-color" content="#f7faf4" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#0f2018" media="(prefers-color-scheme: dark)" />
-  <link rel="icon" href="data:," />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manjari:wght@400;700&family=Noto+Serif+Malayalam:wght@500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
@@ -157,6 +158,8 @@
       text-transform: uppercase;
       margin: 0 0 22px;
     }
+    .brand-logo { display: block; width: 168px; height: auto; margin: 0 0 28px; }
+    .footer-logo { display: block; width: 132px; height: auto; }
     h1 {
       font-family: var(--serif);
       font-size: clamp(50px, 6.8vw, 92px);
@@ -796,6 +799,7 @@
   <main>
     <section class="hero">
       <div class="hero-copy">
+        <img class="brand-logo" src="assets/logo.png" alt="ANS Foods logo" width="280" height="144" />
         <p class="eyebrow"><span data-en>Millet kanji, thoughtfully mixed</span><span data-ml lang="ml">ശ്രദ്ധയോടെ തയ്യാറാക്കിയ മില്ലറ്റ് കഞ്ഞി മിക്സ്</span></p>
         <h1><span data-en>The ideal food for diabetes, blood pressure, cholesterol, and excess weight.</span><span data-ml lang="ml">ഷുഗർ, പ്രെഷർ, കൊളസ്ട്രോൾ, അമിത വണ്ണം എന്നിവയ്ക്കു ഉത്തമമായ ഭക്ഷണം</span></h1>
         <p><span data-en>A wholesome millet kanji mix made for simple, nourishing breakfasts—available in three traditional varieties.</span><span data-ml lang="ml">ലളിതവും പോഷകസമൃദ്ധവുമായ പ്രഭാതഭക്ഷണത്തിനായി തയ്യാറാക്കിയ മില്ലറ്റ് കഞ്ഞി മിക്സ്—മൂന്ന് നാടൻ ഇനങ്ങളിൽ.</span></p>
@@ -914,7 +918,7 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-licence"><span>FSSAI 21324159000712</span><span>UDYAM-KL-01-0044310</span></div>
-      <span>ANS Foods · Kerala</span>
+      <img class="footer-logo" src="assets/logo.png" alt="ANS Foods · Kerala" width="240" height="124" />
     </div>
   </footer>
 
