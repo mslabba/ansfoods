@@ -1,7 +1,7 @@
 FROM node:20-alpine
 WORKDIR /app
-COPY server/package.json ./server/
-RUN npm install --prefix server --omit=dev
+COPY server/package.json server/package-lock.json ./server/
+RUN npm ci --prefix server --omit=dev
 COPY server ./server
 # Public web root: storefront + admin UI + order status page
 COPY index.html order-status.html ./public/
