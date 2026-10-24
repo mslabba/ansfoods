@@ -10,6 +10,17 @@ const { notify } = require('../lib/notify');
 
 const router = express.Router();
 
+// Cash on Delivery is off unless ENABLE_COD=true is set in the environment.
+// The storefront reads /api/config to decide whether to show the COD option.
+function codEnabled() {
+  return String(process.env.ENABLE_COD || '').toLowerCase() === 'true';
+}
+
+router.get('/config', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.json({ cod: codEnabled() });
+});
+
 function generateOrderId() {
   const d = new Date();
   const ymd = d.getFullYear()
@@ -30,6 +41,7 @@ async function validateOrderBody(body) {
   const b = body || {};
   const method = b.method;
   if (method !== 'cod' && method !== 'online') errors.push('Invalid payment method.');
+  else if (method === 'cod' && !codEnabled()) errors.push('Cash on Delivery is currently unavailable. Please pay online.');
   const products = await productsLib.getAll();
   const items = Array.isArray(b.items) ? b.items : [];
   if (!items.length) errors.push('Cart is empty.');
@@ -222,7 +234,7 @@ router.post('/payments/session', async (req, res) => {
     const secretKey = s.cashfree_secret_key || '';
     const env = s.cashfree_env === 'production' ? 'production' : 'sandbox';
     if (!appId || !secretKey) {
-      return res.status(503).json({ error: 'Online payment is not configured yet. Please choose Cash on Delivery.' });
+      return res.status(503).json({ error: codEnabled() ? 'Online payment is not configured yet. Please choose Cash on Delivery.' : 'Online payment is temporarily unavailable. Please try again later.' });
     }
     const appUrl = (process.env.APP_URL || '').replace(/\/$/, '') || `http://localhost:${process.env.PORT || 4000}`;
     const session = await cashfree.createOrder({
