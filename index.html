@@ -90,7 +90,7 @@
         <div class="story-copy">
           <div class="story-row"><span>01</span><div><h3><span data-en>Choose your millet</span><span data-ml lang="ml">മില്ലറ്റ് തിരഞ്ഞെടുക്കൂ</span></h3><p><span data-en>Pick Barnyard, Little or Kodo Millet Kanji Mix.</span><span data-ml lang="ml">കുതിരവാലി, ചാമ, അല്ലെങ്കിൽ വരക് മില്ലറ്റ് കഞ്ഞി മിക്സ് തിരഞ്ഞെടുക്കുക.</span></p></div></div>
           <div class="story-row"><span>02</span><div><h3><span data-en>Build your order</span><span data-ml lang="ml">ഓർഡർ തയ്യാറാക്കൂ</span></h3><p><span data-en>Adjust the quantity in your cart and review the total.</span><span data-ml lang="ml">കാർട്ടിൽ അളവ് ക്രമീകരിച്ച് ആകെ തുക പരിശോധിക്കുക.</span></p></div></div>
-          <div class="story-row"><span>03</span><div><h3><span data-en>Checkout & pay</span><span data-ml lang="ml">പണമടച്ച് ഓർഡർ ചെയ്യൂ</span></h3><p><span data-en>Enter your delivery details and pay online or choose Cash on Delivery. WhatsApp support appears after the order step is complete.</span><span data-ml lang="ml">ഡെലിവറി വിവരങ്ങൾ നൽകി ഓൺലൈനായി പണമടയ്ക്കുകയോ ക്യാഷ് ഓൺ ഡെലിവറി തിരഞ്ഞെടുക്കുകയോ ചെയ്യുക. ഓർഡർ ഘട്ടം പൂർത്തിയായ ശേഷമാണ് വാട്ട്‌സ്ആപ്പ് സഹായം ലഭിക്കുക.</span></p></div></div>
+          <div class="story-row"><span>03</span><div><h3><span data-en>Checkout & pay</span><span data-ml lang="ml">പണമടച്ച് ഓർഡർ ചെയ്യൂ</span></h3><p><span data-en>Enter your delivery details and pay securely online. WhatsApp support appears after the order step is complete.</span><span data-ml lang="ml">ഡെലിവറി വിവരങ്ങൾ നൽകി സുരക്ഷിതമായി ഓൺലൈനായി പണമടയ്ക്കുക. ഓർഡർ ഘട്ടം പൂർത്തിയായ ശേഷമാണ് വാട്ട്‌സ്ആപ്പ് സഹായം ലഭിക്കുക.</span></p></div></div>
         </div>
       </div>
     </section>
@@ -188,15 +188,15 @@
           <div class="field"><label for="customerPincode"><span data-en>PIN code</span><span data-ml lang="ml">പിൻ കോഡ്</span></label><input id="customerPincode" name="pincode" inputmode="numeric" autocomplete="postal-code" required /></div>
           <div class="payment-panel">
             <h3><span data-en>Payment method</span><span data-ml lang="ml">പേയ്‌മെന്റ് രീതി</span></h3>
-            <label class="pay-option">
-              <input type="radio" name="paymethod" value="cod" checked />
+            <label class="pay-option" id="codOption" hidden>
+              <input type="radio" name="paymethod" value="cod" disabled />
               <span class="pay-option-body">
                 <strong><span data-en>Cash on Delivery</span><span data-ml lang="ml">ക്യാഷ് ഓൺ ഡെലിവറി</span></strong>
                 <small><span data-en>Pay when your order arrives.</span><span data-ml lang="ml">ഓർഡർ എത്തുമ്പോൾ പണം നൽകുക.</span></small>
               </span>
             </label>
             <label class="pay-option">
-              <input type="radio" name="paymethod" value="online" />
+              <input type="radio" name="paymethod" value="online" checked />
               <span class="pay-option-body">
                 <strong><span data-en>Pay online</span><span data-ml lang="ml">ഓൺലൈനായി അടയ്ക്കുക</span></strong>
                 <small><span data-en>UPI, cards and netbanking — secure payment.</span><span data-ml lang="ml">UPI, കാർഡ്, നെറ്റ്ബാങ്കിംഗ് — സുരക്ഷിത പേയ്‌മെന്റ്.</span></small>
@@ -211,7 +211,7 @@
         <h3><span data-en>Order summary</span><span data-ml lang="ml">ഓർഡർ സംഗ്രഹം</span></h3>
         <div id="checkoutSummaryItems"></div>
         <div class="summary-total"><span><span data-en>Total</span><span data-ml lang="ml">ആകെ</span></span><strong id="checkoutTotal">₹0</strong></div>
-        <p class="after-payment" id="payMethodNote"><span data-en>Payment method: Cash on Delivery. Shipping charge and delivery time will be shown for confirmation after you place the order.</span><span data-ml lang="ml">പേയ്‌മെന്റ് രീതി: ക്യാഷ് ഓൺ ഡെലിവറി. ഓർഡർ നൽകിയ ശേഷം ഷിപ്പിംഗ് ചാർജും ഡെലിവറി സമയവും സ്ഥിരീകരിക്കാം.</span></p>
+        <p class="after-payment" id="payMethodNote"><span data-en>Payment method: Online (UPI, cards, netbanking). You will be taken to the secure payment page after you place the order.</span><span data-ml lang="ml">പേയ്‌മെന്റ് രീതി: ഓൺലൈൻ (UPI, കാർഡ്, നെറ്റ്ബാങ്കിംഗ്). ഓർഡർ നൽകിയ ശേഷം സുരക്ഷിത പേയ്‌മെന്റ് പേജിലേക്ക് പോകും.</span></p>
       </aside>
     </div>
   </section>
@@ -616,6 +616,16 @@
           showToast(err.message || t('Could not place the order. Please try again.', 'ഓർഡർ നൽകാനായില്ല. വീണ്ടും ശ്രമിക്കുക.'));
         });
       });
+      // Cash on Delivery stays hidden unless the server has ENABLE_COD=true.
+      fetch('/api/config', { headers: { 'Accept': 'application/json' } })
+        .then(function(r){ return r.ok ? r.json() : {}; })
+        .then(function(cfg){
+          if (!cfg || cfg.cod !== true) return;
+          var codOption = document.getElementById('codOption');
+          codOption.hidden = false;
+          codOption.querySelector('input').disabled = false;
+        })
+        .catch(function(){});
       checkoutForm.querySelectorAll('input[name="paymethod"]').forEach(function(radio){
         radio.addEventListener('change', renderPayNote);
       });

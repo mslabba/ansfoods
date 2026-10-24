@@ -21,6 +21,7 @@ services:
       ADMIN_EMAIL: ${ADMIN_EMAIL:?Set ADMIN_EMAIL in .env}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Set ADMIN_PASSWORD in .env}
       APP_URL: ${APP_URL:?Set APP_URL in .env}
+      ENABLE_COD: ${ENABLE_COD:-false}
       PORT: 4000
     ports:
       - "8090:4000"
