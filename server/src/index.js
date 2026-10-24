@@ -21,6 +21,9 @@ async function seedAdmin() {
 
 async function main() {
   if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL is required.');
+  // Fail fast instead of silently signing admin sessions with the known
+  // 'change-me-in-production' fallback in admin.js.
+  if (!process.env.SESSION_SECRET) throw new Error('SESSION_SECRET is required.');
   await db.migrate();
   await seedAdmin();
   const app = createApp();

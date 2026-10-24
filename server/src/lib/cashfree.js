@@ -61,16 +61,23 @@ async function fetchOrderStatus({ env, appId, secretKey, cfOrderId }) {
   return data; // { order_status: 'PAID' | 'ACTIVE' | ..., ... }
 }
 
-// Webhook signature per Cashfree docs: HMAC-SHA256(secretKey, timestamp + rawBody),
-// compared against the x-webhook-signature header (hex).
+// Webhook signature per Cashfree docs: Base64(HMAC-SHA256(secretKey,
+// timestamp + rawBody)), compared against the x-webhook-signature header.
+// Accept the hex form too: same secret either way, so accepting both costs
+// nothing and keeps webhooks working regardless of which encoding arrives.
+function timingSafeEqualStr(a, b) {
+  const ab = Buffer.from(a, 'utf8');
+  const bb = Buffer.from(b, 'utf8');
+  return ab.length === bb.length && crypto.timingSafeEqual(ab, bb);
+}
+
 function verifyWebhookSignature({ rawBody, timestamp, signature, secretKey }) {
   try {
     if (!rawBody || !timestamp || !signature || !secretKey) return false;
     const payload = String(timestamp) + rawBody.toString('utf8');
-    const expected = crypto.createHmac('sha256', secretKey).update(payload).digest('hex');
-    const a = Buffer.from(expected, 'utf8');
-    const b = Buffer.from(String(signature), 'utf8');
-    return a.length === b.length && crypto.timingSafeEqual(a, b);
+    const hex = crypto.createHmac('sha256', secretKey).update(payload).digest('hex');
+    const b64 = Buffer.from(hex, 'hex').toString('base64');
+    return timingSafeEqualStr(String(signature), hex) || timingSafeEqualStr(String(signature), b64);
   } catch {
     return false;
   }
