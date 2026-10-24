@@ -695,6 +695,23 @@
       transition: opacity .2s ease, transform .2s ease;
     }
     .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    .toast.has-action { pointer-events: auto; display: flex; align-items: center; gap: 14px; padding: 8px 8px 8px 16px; box-shadow: var(--shadow); }
+    .toast.has-action > span { white-space: nowrap; }
+    .toast-action { border: 0; border-radius: 4px; background: var(--forest); color: var(--paper); font: inherit; font-weight: 700; padding: 7px 12px; cursor: pointer; white-space: nowrap; }
+    @keyframes cartBump { 0% { transform: scale(1); } 35% { transform: scale(1.22); } 65% { transform: scale(.94); } 100% { transform: scale(1); } }
+    .cart-bump { animation: cartBump .6s ease; box-shadow: 0 0 0 3px color-mix(in srgb, var(--forest) 45%, transparent); }
+    .cart-fab {
+      position: fixed; right: 16px; bottom: calc(18px + env(safe-area-inset-bottom)); z-index: 45;
+      width: 54px; height: 54px; border-radius: 50%; border: 0;
+      background: var(--forest-deep); color: var(--on-green); box-shadow: var(--shadow);
+      display: none; place-items: center; cursor: pointer;
+    }
+    .cart-fab svg { width: 24px; }
+    .cart-fab .cart-count { top: -3px; right: -3px; background: var(--gold); color: #1d1a14; }
+    @media (max-width: 720px) {
+      .cart-fab.has-items { display: grid; }
+      .toast.has-action { bottom: calc(84px + env(safe-area-inset-bottom)); }
+    }
     [data-ml] { display: none !important; }
     body.ml [data-en] { display: none !important; }
     body.ml [data-ml] { display: revert !important; }

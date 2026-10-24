@@ -81,6 +81,49 @@
     return clean;
   }
   function saveCart(cart) { writeJSON(CART_KEY, cart || {}); }
+  function clearCart() {
+    try { window.localStorage.removeItem(CART_KEY); } catch (e) {}
+    try { window.sessionStorage.removeItem(CART_KEY); } catch (e) {}
+  }
+  // Keep a page's in-memory cart in sync when another tab changes it
+  // (e.g. the order-status tab clears it after a successful payment).
+  function onCartChange(cb) {
+    window.addEventListener('storage', function (e) {
+      if (e.key === CART_KEY || e.key === null) cb(loadCart());
+    });
+  }
+
+  /* ---------- shared cart UI: badge, floating button, "added" toast ---------- */
+  function syncCartBadge(count) {
+    document.querySelectorAll('.cart-count').forEach(function (el) { el.textContent = count; });
+    var fab = document.querySelector('.cart-fab');
+    if (fab) fab.classList.toggle('has-items', count > 0);
+  }
+  function bump(el) {
+    if (!el) return;
+    el.classList.remove('cart-bump');
+    void el.offsetWidth; // restart the animation
+    el.classList.add('cart-bump');
+    window.setTimeout(function () { el.classList.remove('cart-bump'); }, 700);
+  }
+  // Toast with a "View cart" action. Never navigates on its own.
+  function notifyAdded(lang, onView) {
+    var toast = document.querySelector('.toast');
+    var ml = lang === 'ml';
+    if (toast) {
+      toast.innerHTML = '<span>' + (ml ? 'കാർട്ടിൽ ചേർത്തു' : 'Added to cart') + '</span>' +
+        '<button type="button" class="toast-action">' + (ml ? 'കാർട്ട് കാണുക' : 'View cart') + '</button>';
+      toast.classList.add('show', 'has-action');
+      toast.querySelector('.toast-action').addEventListener('click', function () {
+        toast.classList.remove('show', 'has-action');
+        if (onView) onView();
+      });
+      window.clearTimeout(notifyAdded.timer);
+      notifyAdded.timer = window.setTimeout(function () { toast.classList.remove('show', 'has-action'); }, 3500);
+    }
+    bump(document.querySelector('.cart-trigger'));
+    bump(document.querySelector('.cart-fab'));
+  }
 
   function cartCount(cart) {
     return Object.keys(cart).reduce(function (s, id) { return s + (cart[id] || 0); }, 0);
@@ -160,7 +203,8 @@
     refreshProducts: refreshProducts,
     productName: productName,
     productCardHTML: productCardHTML,
-    cart: { load: loadCart, save: saveCart, count: cartCount, total: cartTotal },
+    cart: { load: loadCart, save: saveCart, clear: clearCart, onChange: onCartChange, count: cartCount, total: cartTotal },
+    ui: { syncCartBadge: syncCartBadge, notifyAdded: notifyAdded },
     money: money,
     esc: esc
   };
