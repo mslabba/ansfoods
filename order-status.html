@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ANS Foods — Order status</title>
+<style>
+  body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; background:#fbf8f2; color:#2b2620;
+         display:flex; min-height:100vh; align-items:center; justify-content:center; padding:20px; }
+  .card { background:#fffdf9; border:1px solid #e7ddcf; border-radius:12px; padding:36px 28px; max-width:440px; width:100%; text-align:center; }
+  .status-logo { width:150px; height:auto; margin:0 auto 18px; display:block; }
+  .mark { font-size:44px; margin-bottom:8px; }
+  h1 { font-size:22px; margin:0 0 8px; }
+  p { color:#7a6f62; font-size:14px; margin:6px 0; }
+  .oid { font-size:13px; color:#7a6f62; } .oid strong { color:#2b2620; letter-spacing:.5px; }
+  .wa { display:inline-block; margin-top:18px; background:#1f7a3d; color:#fff; text-decoration:none;
+        padding:12px 22px; border-radius:8px; font-weight:700; }
+  .lang { margin-top:16px; } .lang button { border:1px solid #e7ddcf; background:#fff; border-radius:6px; padding:6px 12px; margin:0 4px; cursor:pointer; }
+  .lang button.on { background:#234a2d; color:#fff; border-color:#234a2d; }
+  .spin { width:34px; height:34px; border:4px solid #e7ddcf; border-top-color:#2f5d3a; border-radius:50%; margin:0 auto 12px; animation:sp 1s linear infinite; }
+  @keyframes sp { to { transform:rotate(360deg); } }
+</style>
+</head>
+<body>
+<div class="card">
+  <img class="status-logo" src="assets/logo.png" alt="ANS Foods logo" width="300" height="155" />
+  <div id="icon"><div class="spin"></div></div>
+  <h1 id="title">Checking your payment…</h1>
+  <p class="oid">Order ID: <strong id="oid">–</strong></p>
+  <p id="desc">Please wait while we confirm your payment with the bank.</p>
+  <div id="waWrap" style="display:none;"><a class="wa" id="waBtn" href="https://wa.me/919037138030" target="_blank" rel="noopener">Connect on WhatsApp</a></div>
+  <div class="lang"><button id="langEn" class="on">English</button><button id="langMl">മലയാളം</button></div>
+</div>
+<script>
+(function(){
+  'use strict';
+  var q = new URLSearchParams(location.search);
+  var orderId = q.get('order_id') || '';
+  document.getElementById('oid').textContent = orderId || '–';
+  var lang = 'en';
+  var T = {
+    checking: { en:'Checking your payment…', ml:'പേയ്‌മെന്റ് പരിശോധിക്കുന്നു…' },
+    wait: { en:'Please wait while we confirm your payment with the bank.', ml:'ബാങ്കുമായി പേയ്‌മെന്റ് സ്ഥിരീകരിക്കുന്നത് വരെ കാത്തിരിക്കൂ.' },
+    paid: { en:'Payment successful — order placed!', ml:'പേയ്‌മെന്റ് വിജയകരം — ഓർഡർ നൽകി!' },
+    paidDesc: { en:'Thank you! ANS Foods will confirm shipping and delivery time on WhatsApp.', ml:'നന്ദി! ഷിപ്പിംഗും ഡെലിവറി സമയവും ANS Foods വാട്ട്‌സ്ആപ്പിൽ സ്ഥിരീകരിക്കും.' },
+    pending: { en:'Payment is still processing.', ml:'പേയ്‌മെന്റ് ഇപ്പോഴും പ്രോസസ്സ് ചെയ്യുന്നു.' },
+    pendingDesc: { en:'If money was debited, it will reflect shortly. You can also check back in a few minutes.', ml:'പണം ഡെബിറ്റ് ആയിട്ടുണ്ടെങ്കിൽ ഉടൻ തെളിയും. കുറച്ച് കഴിഞ്ഞ് വീണ്ടും പരിശോധിക്കാം.' },
+    failed: { en:'Payment did not go through.', ml:'പേയ്‌മെന്റ് പൂർത്തിയായില്ല.' },
+    failedDesc: { en:'No money was charged. Please try again from the store.', ml:'പണം ഈടാക്കിയിട്ടില്ല. സ്റ്റോറിൽ നിന്ന് വീണ്ടും ശ്രമിക്കുക.' },
+    missing: { en:'No order found.', ml:'ഓർഡർ കണ്ടെത്തിയില്ല.' }
+  };
+  function setLang(l){
+    lang = l;
+    document.getElementById('langEn').classList.toggle('on', l === 'en');
+    document.getElementById('langMl').classList.toggle('on', l === 'ml');
+    render(lastStatus);
+  }
+  document.getElementById('langEn').addEventListener('click', function(){ setLang('en'); });
+  document.getElementById('langMl').addEventListener('click', function(){ setLang('ml'); });
+  var lastStatus = 'checking', tries = 0;
+  function render(status){
+    lastStatus = status;
+    var icon = document.getElementById('icon'), title = document.getElementById('title'), desc = document.getElementById('desc');
+    if (status === 'paid') {
+      icon.innerHTML = '<div class="mark">✓</div>';
+      title.textContent = T.paid[lang]; desc.textContent = T.paidDesc[lang];
+      document.getElementById('waWrap').style.display = 'block';
+    } else if (status === 'failed' || status === 'cancelled') {
+      icon.innerHTML = '<div class="mark">✕</div>';
+      title.textContent = T.failed[lang]; desc.textContent = T.failedDesc[lang];
+    } else if (status === 'missing') {
+      icon.innerHTML = '<div class="mark">?</div>';
+      title.textContent = T.missing[lang]; desc.textContent = '';
+    } else if (status === 'checking') {
+      title.textContent = T.checking[lang]; desc.textContent = T.wait[lang];
+    } else {
+      icon.innerHTML = '<div class="spin"></div>';
+      title.textContent = T.pending[lang]; desc.textContent = T.pendingDesc[lang];
+    }
+  }
+  function poll(){
+    if (!orderId) { render('missing'); return; }
+    fetch('/api/orders/' + encodeURIComponent(orderId))
+      .then(function(r){ return r.json().then(function(j){ return { ok: r.ok, j: j }; }); })
+      .then(function(r){
+        if (!r.ok) { render('missing'); return; }
+        var st = r.j.status;
+        if (st === 'paid' || st === 'confirmed') { render('paid'); return; }
+        if (st === 'failed' || st === 'cancelled') { render('failed'); return; }
+        render('pending');
+        if (++tries < 40) setTimeout(poll, 3000);
+      })
+      .catch(function(){ if (++tries < 40) setTimeout(poll, 3000); });
+  }
+  render('checking');
+  poll();
+})();
+</script>
+</body>
+</html>
