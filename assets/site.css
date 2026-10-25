@@ -160,6 +160,26 @@
       max-width: 600px;
       margin: 28px 0 34px;
     }
+    .hero-conditions {
+      list-style: none;
+      padding: 0;
+      margin: 26px 0 0;
+      display: grid;
+      gap: 8px;
+      font-size: clamp(19px, 2.2vw, 23px);
+      font-weight: 600;
+    }
+    .hero-conditions li { padding-left: 22px; position: relative; }
+    .hero-conditions li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: .55em;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--forest);
+    }
     .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
     .primary-btn, .secondary-btn, .add-btn, .checkout-btn {
       border: 0;
