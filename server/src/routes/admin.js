@@ -252,14 +252,17 @@ router.post('/products', async (req, res) => {
     const b = req.body || {};
     const errors = validateProductInput(b, true);
     if (!String(b.image || '').trim()) errors.push('A product image is required — upload one or paste an image path.');
+    let benefits = [];
+    try { benefits = productsLib.validateBenefits(b.benefits); }
+    catch (e) { errors.push(e.message); }
     if (errors.length) return res.status(400).json({ error: errors[0] });
     const id = String(b.id).trim().toLowerCase();
     try {
       const { rows } = await db.query(
         `INSERT INTO products
            (id, name_en, name_ml, grain_en, grain_ml, short_en, short_ml, copy_en, copy_ml,
-            price_paise, image, type, featured, stock, active)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)
+            price_paise, image, type, featured, stock, active, benefits)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)
          RETURNING *`,
         [id,
          String(b.name_en).trim(), String(b.name_ml || '').trim(),
@@ -268,7 +271,7 @@ router.post('/products', async (req, res) => {
          String(b.copy_en || '').trim(), String(b.copy_ml || '').trim(),
          Math.round(Number(b.price) * 100), String(b.image).trim(),
          String(b.type || '').trim().toLowerCase(), Number(b.featured) || 0,
-         Number(b.stock) || 0, b.active !== false]
+         Number(b.stock) || 0, b.active !== false, JSON.stringify(benefits)]
       );
       await productsLib.refresh();
       res.status(201).json({ product: rowToAdminProduct(rows[0]) });
@@ -287,6 +290,11 @@ router.put('/products/:id', async (req, res) => {
     const b = req.body || {};
     const errors = validateProductInput(b, false);
     if (errors.length) return res.status(400).json({ error: errors[0] });
+    let benefits;
+    if (b.benefits !== undefined) {
+      try { benefits = productsLib.validateBenefits(b.benefits); }
+      catch (e) { return res.status(400).json({ error: e.message }); }
+    }
     const sets = [];
     const params = [];
     const push = (col, val) => { params.push(val); sets.push(col + ' = $' + params.length); };
@@ -307,6 +315,7 @@ router.put('/products/:id', async (req, res) => {
     if (b.featured !== undefined) push('featured', Number(b.featured) || 0);
     if (b.stock !== undefined) push('stock', Number(b.stock) || 0);
     if (b.active !== undefined) push('active', !!b.active);
+    if (benefits !== undefined) push('benefits', JSON.stringify(benefits));
     if (!sets.length) return res.status(400).json({ error: 'Nothing to update.' });
     push('updated_at', new Date());
     params.push(req.params.id);

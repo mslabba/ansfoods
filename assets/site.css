@@ -295,6 +295,7 @@
       color: inherit;
       cursor: pointer;
       text-align: inherit;
+      text-decoration: none;
     }
     .product-image-link:focus-visible,
     .product-title-link:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
@@ -306,6 +307,7 @@
       color: inherit;
       cursor: pointer;
       text-align: inherit;
+      text-decoration: none;
       font: inherit;
     }
     .product-title-link:hover { color: var(--forest-deep); text-decoration: underline; text-underline-offset: 4px; }
@@ -473,47 +475,6 @@
     .total-row strong { font-family: var(--serif); font-size: 28px; }
     .delivery-copy { font-size: 12px; color: var(--muted); margin: 0 0 16px; }
     .checkout-btn { width: 100%; min-height: 54px; }
-    .detail-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 60;
-      background: var(--paper);
-      overflow-y: auto;
-      display: none;
-    }
-    .detail-overlay.open { display: block; }
-    .detail-topbar {
-      position: sticky;
-      top: 0;
-      z-index: 2;
-      min-height: 64px;
-      padding: 10px max(18px, calc((100vw - 1184px) / 2));
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      border-bottom: 1px solid var(--line);
-      background: color-mix(in srgb, var(--paper) 94%, transparent);
-      backdrop-filter: blur(12px);
-    }
-    .detail-back {
-      border: 0;
-      background: transparent;
-      color: var(--forest-deep);
-      font-weight: 700;
-      cursor: pointer;
-      padding: 10px 0;
-    }
-    .detail-close {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      border: 1px solid var(--line);
-      background: var(--paper-2);
-      color: var(--ink);
-      font-size: 24px;
-      cursor: pointer;
-    }
     .detail-main {
       max-width: 1184px;
       margin: 0 auto;

@@ -168,26 +168,47 @@ router.post('/orders', async (req, res) => {
 });
 
 // GET /api/products — public catalog for the storefront (active products only).
+// One canonical public shape, shared with GET /api/products/:slug below.
+function publicProduct(p) {
+  return {
+    id: p.id,
+    nameEn: p.nameEn, nameMl: p.nameMl,
+    grainEn: p.grainEn, grainMl: p.grainMl,
+    shortEn: p.shortEn, shortMl: p.shortMl,
+    copyEn: p.copyEn, copyMl: p.copyMl,
+    image: p.image, type: p.type, featured: p.featured,
+    stock: p.stock,
+    pricePaise: p.pricePaise, price: p.pricePaise / 100,
+    benefits: p.benefits || [],
+  };
+}
+
 router.get('/products', async (req, res) => {
   try {
     const all = await productsLib.getAll();
     const list = Object.values(all)
       .filter((p) => p.active)
       .sort((a, b) => a.featured - b.featured)
-      .map((p) => ({
-        id: p.id,
-        nameEn: p.nameEn, nameMl: p.nameMl,
-        grainEn: p.grainEn, grainMl: p.grainMl,
-        shortEn: p.shortEn, shortMl: p.shortMl,
-        copyEn: p.copyEn, copyMl: p.copyMl,
-        image: p.image, type: p.type, featured: p.featured,
-        stock: p.stock,
-        pricePaise: p.pricePaise, price: p.pricePaise / 100,
-      }));
+      .map(publicProduct);
     res.json({ products: list });
   } catch (err) {
     console.error('GET /api/products:', err.message);
     res.status(500).json({ error: 'Could not load products.' });
+  }
+});
+
+// GET /api/products/:slug — single product for the product page.
+// Reads through the same catalog cache as the list; 404 for unknown
+// or inactive products (inactive = soft-deleted from the shop).
+router.get('/products/:slug', async (req, res) => {
+  try {
+    const all = await productsLib.getAll();
+    const p = all[String(req.params.slug || '')];
+    if (!p || !p.active) return res.status(404).json({ error: 'Product not found.' });
+    res.json({ product: publicProduct(p) });
+  } catch (err) {
+    console.error('GET /api/products/:slug:', err.message);
+    res.status(500).json({ error: 'Could not load the product.' });
   }
 });
 

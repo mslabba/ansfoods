@@ -144,26 +144,6 @@
     </section>
   </div>
 
-  <section class="detail-overlay" id="detailOverlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
-    <div class="detail-topbar">
-      <button class="detail-back" type="button"><span data-en>← Back to all products</span><span data-ml lang="ml">← എല്ലാ ഉൽപ്പന്നങ്ങളിലേക്കും</span></button>
-      <button class="detail-close" type="button" aria-label="Close product details">×</button>
-    </div>
-    <div class="detail-main">
-      <div class="detail-image-wrap"><img class="detail-image" id="detailImage" src="assets/ans-barnyard-pro.jpg" alt="" /></div>
-      <div class="detail-copy">
-        <p class="eyebrow"><span data-en>ANS Foods · Millet kanji mix</span><span data-ml lang="ml">ANS Foods · മില്ലറ്റ് കഞ്ഞി മിക്സ്</span></p>
-        <h2 class="detail-title" id="detailTitle"></h2>
-        <p class="detail-local" id="detailLocal"></p>
-        <p class="detail-description" id="detailDescription"></p>
-        <div class="detail-buy">
-          <div class="detail-price"><strong>₹600</strong><span><span data-en>per 900 g pack</span><span data-ml lang="ml">900 ഗ്രാം പാക്കിന്</span></span></div>
-          <button class="add-btn detail-add" id="detailAdd" type="button"><span data-en>Add to cart</span><span data-ml lang="ml">കാർട്ടിൽ ചേർക്കുക</span></button>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <button class="cart-fab" type="button" aria-label="Open cart">
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 4h2l2.2 9.2a2 2 0 0 0 2 1.5h7.7a2 2 0 0 0 1.9-1.4L21 7H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9.5" cy="19" r="1.3" fill="currentColor"/><circle cx="17.5" cy="19" r="1.3" fill="currentColor"/></svg>
     <span class="cart-count">0</span>
@@ -191,8 +171,6 @@
   var overlay = document.getElementById('cartOverlay');
   var cartItems = document.getElementById('cartItems');
   var cartTotal = document.getElementById('cartTotal');
-  var detailOverlay = document.getElementById('detailOverlay');
-  var activeDetail = null;
   var lastFocus = null;
 
   var state = { q: '', type: 'all', sort: 'featured' };
@@ -232,9 +210,6 @@
     grid.querySelectorAll('[data-product]').forEach(function (btn) {
       btn.addEventListener('click', function () { addToCart(btn.getAttribute('data-product')); });
     });
-    grid.querySelectorAll('[data-details]').forEach(function (btn) {
-      btn.addEventListener('click', function () { openDetail(btn.getAttribute('data-details')); });
-    });
   }
 
   /* ---------- cart (shared with the home page) ---------- */
@@ -247,7 +222,7 @@
     }
     cart[id] = Math.min(p.stock, (cart[id] || 0) + 1);
     renderCart();
-    ANS.ui.notifyAdded(language, function () { if (activeDetail) closeDetail(); openCart(); });
+    ANS.ui.notifyAdded(language, function () { openCart(); });
   }
   function totalQty() { return ANS.cart.count(cart); }
 
@@ -300,37 +275,9 @@
   });
   overlay.querySelector('.close-btn').addEventListener('click', closeCart);
   overlay.addEventListener('click', function (e) { if (e.target === overlay) closeCart(); });
-
-  /* ---------- quick view ---------- */
-  function openDetail(id) {
-    var p = products[id]; if (!p) return;
-    activeDetail = id;
-    document.getElementById('detailImage').src = p.img;
-    document.getElementById('detailImage').alt = 'ANS Foods ' + t(p.en, p.ml);
-    document.getElementById('detailTitle').textContent = t(p.en, p.ml);
-    document.getElementById('detailLocal').textContent = t(p.grainEn, p.grainMl);
-    document.getElementById('detailDescription').textContent = t(p.copyEn, p.copyMl);
-    lastFocus = document.activeElement;
-    detailOverlay.classList.add('open'); detailOverlay.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-    detailOverlay.querySelector('.detail-close').focus();
-  }
-  function closeDetail() {
-    detailOverlay.classList.remove('open'); detailOverlay.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-    activeDetail = null;
-    if (lastFocus) lastFocus.focus();
-  }
-  detailOverlay.querySelector('.detail-close').addEventListener('click', closeDetail);
-  detailOverlay.querySelector('.detail-back').addEventListener('click', closeDetail);
-  detailOverlay.addEventListener('click', function (e) { if (e.target === detailOverlay) closeDetail(); });
-  document.getElementById('detailAdd').addEventListener('click', function () {
-    if (activeDetail) addToCart(activeDetail);
-  });
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
-    if (detailOverlay.classList.contains('open')) closeDetail();
-    else if (overlay.classList.contains('open')) closeCart();
+    if (overlay.classList.contains('open')) closeCart();
   });
 
   /* ---------- toolbar events ---------- */

@@ -17,9 +17,18 @@ function createApp() {
   app.use('/api', require('./routes/public'));
   app.use('/api/admin', require('./routes/admin'));
 
+  // Product details is a real page at /products/:slug (slug = product id).
+  // The page itself fetches GET /api/products/:slug and renders from the
+  // backend, so a direct load, refresh or shared link always shows live
+  // data. /products with no slug is not a page — send it to the shop.
+  app.get('/products', (req, res) => res.redirect(301, '/shop'));
+  app.get('/products/:slug', (req, res) => {
+    res.sendFile(path.join(PUBLIC_DIR, 'product.html'));
+  });
+
   // Clean URLs: the site never shows .html. Redirect any direct .html hit
   // (old links, bookmarks) to the canonical path, keeping query strings.
-  for (const [oldPath, newPath] of [['/shop.html', '/shop'], ['/order-status.html', '/order-status'], ['/index.html', '/']]) {
+  for (const [oldPath, newPath] of [['/shop.html', '/shop'], ['/order-status.html', '/order-status'], ['/index.html', '/'], ['/product.html', '/shop']]) {
     app.get(oldPath, (req, res) => {
       const q = req.originalUrl.indexOf('?');
       res.redirect(301, newPath + (q === -1 ? '' : req.originalUrl.slice(q)));

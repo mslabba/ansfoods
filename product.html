@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Product — ANS Foods</title>
+<meta name="description" content="ANS Foods millet kanji mix — price, description and wellness benefits." />
+<link rel="stylesheet" href="/assets/site.css" />
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+<style>
+  /* Product page: the detail view as a real page (not a pop-up), so it has
+     its own URL, can be refreshed, shared and linked to from the shop. */
+  .product-page { max-width: 1240px; margin: 0 auto; padding: clamp(20px, 3vw, 36px) 28px 80px; }
+  .product-back {
+    display: inline-block; margin: 6px 0 4px; color: var(--forest-deep);
+    font-weight: 700; text-decoration: none;
+  }
+  .product-back:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .product-page .detail-main { padding-top: 18px; }
+  .detail-benefits h2 { font-family: var(--serif); font-size: 25px; margin: 0 0 12px; }
+  .detail-stock { color: var(--terracotta); font-size: 14px; font-weight: 700; margin: 16px 0 0; }
+  .detail-stock.low { color: var(--muted); }
+  .product-state { text-align: center; padding: 90px 20px; color: var(--muted); }
+  .product-state h1 { font-family: var(--serif); color: var(--ink); font-size: 32px; margin: 0 0 10px; }
+  .product-state p { margin: 0 0 22px; }
+  @media (max-width: 720px) {
+    .product-page { padding-left: 18px; padding-right: 18px; }
+  }
+</style>
+</head>
+<body>
+  <header class="utility" aria-label="Store controls">
+    <div class="origin"><span data-en>Made in Kerala</span><span data-ml lang="ml">കേരളത്തിൽ നിർമ്മിച്ചത്</span></div>
+    <div class="utility-actions">
+      <a class="nav-link" href="/"><span data-en>Home</span><span data-ml lang="ml">ഹോം</span></a>
+      <a class="nav-link" href="/shop"><span data-en>Shop</span><span data-ml lang="ml">ഷോപ്പ്</span></a>
+      <div class="lang-switch" aria-label="Language">
+        <button class="lang-btn" type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button class="lang-btn" type="button" data-lang="ml" aria-pressed="false">മലയാളം</button>
+      </div>
+      <button class="cart-trigger" type="button" aria-label="Open cart" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 4h2l2.2 9.2a2 2 0 0 0 2 1.5h7.7a2 2 0 0 0 1.9-1.4L21 7H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9.5" cy="19" r="1.3" fill="currentColor"/><circle cx="17.5" cy="19" r="1.3" fill="currentColor"/></svg>
+        <span class="cart-count" aria-live="polite">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="product-page">
+    <div class="product-state" id="productLoading">
+      <p><span data-en>Loading the product…</span><span data-ml lang="ml">ഉൽപ്പന്നം ലോഡ് ചെയ്യുന്നു…</span></p>
+    </div>
+
+    <div class="product-state" id="productNotFound" hidden>
+      <h1><span data-en>Product not found</span><span data-ml lang="ml">ഉൽപ്പന്നം കണ്ടെത്തിയില്ല</span></h1>
+      <p><span data-en>This product is no longer available.</span><span data-ml lang="ml">ഈ ഉൽപ്പന്നം ഇപ്പോൾ ലഭ്യമല്ല.</span></p>
+      <a class="secondary-btn" href="/shop"><span data-en>Browse the shop</span><span data-ml lang="ml">ഷോപ്പ് കാണൂ</span></a>
+    </div>
+
+    <article id="productDetail" hidden>
+      <a class="product-back" href="/shop"><span data-en>← Back to all products</span><span data-ml lang="ml">← എല്ലാ ഉൽപ്പന്നങ്ങളിലേക്കും</span></a>
+      <div class="detail-main">
+        <div class="detail-image-wrap"><img class="detail-image" id="detailImage" src="/assets/ans-barnyard-pro.jpg" alt="" /></div>
+        <div class="detail-copy">
+          <p class="eyebrow"><span data-en>ANS Foods · Millet kanji mix</span><span data-ml lang="ml">ANS Foods · മില്ലറ്റ് കഞ്ഞി മിക്സ്</span></p>
+          <h1 class="detail-title" id="detailTitle"></h1>
+          <p class="detail-local" id="detailLocal"></p>
+          <p class="detail-description" id="detailDescription"></p>
+          <div class="detail-buy">
+            <div class="detail-price"><strong id="detailPrice"></strong><span><span data-en>per 900 g pack</span><span data-ml lang="ml">900 ഗ്രാം പാക്കിന്</span></span></div>
+            <button class="add-btn detail-add" id="detailAdd" type="button"><span data-en>Add to cart</span><span data-ml lang="ml">കാർട്ടിൽ ചേർക്കുക</span></button>
+          </div>
+          <p class="detail-stock" id="detailStock" hidden></p>
+          <div class="detail-benefits" id="detailBenefits" hidden>
+            <h2><span data-en>Millet wellness benefits</span><span data-ml lang="ml">മില്ലറ്റിന്റെ ആരോഗ്യ ഗുണങ്ങൾ</span></h2>
+            <div class="detail-benefit-list" id="detailBenefitList"></div>
+          </div>
+          <div class="detail-facts" aria-label="Product facts">
+            <div class="detail-fact"><strong><span data-en>100% natural</span><span data-ml lang="ml">100% നാച്വറൽ</span></strong><span><span data-en>Carefully prepared grain mix</span><span data-ml lang="ml">ശ്രദ്ധയോടെ തയ്യാറാക്കിയ ധാന്യ മിശ്രിതം</span></span></div>
+            <div class="detail-fact"><strong><span data-en>Pure vegetarian</span><span data-ml lang="ml">പൂർണ്ണ സസ്യാഹാരം</span></strong><span><span data-en>Plant-based product</span><span data-ml lang="ml">സസ്യാധിഷ്ഠിത ഉൽപ്പന്നം</span></span></div>
+            <div class="detail-fact"><strong><span data-en>No added colour</span><span data-ml lang="ml">നിറം ചേർത്തിട്ടില്ല</span></strong><span><span data-en>Nothing unnecessary</span><span data-ml lang="ml">അനാവശ്യമായ ഒന്നുമില്ല</span></span></div>
+            <div class="detail-fact"><strong><span data-en>No preservatives</span><span data-ml lang="ml">പ്രിസർവേറ്റീവുകളില്ല</span></strong><span><span data-en>Simply prepared</span><span data-ml lang="ml">ലളിതമായി തയ്യാറാക്കിയത്</span></span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-licence"><span>FSSAI 21324159000712</span><span>UDYAM-KL-01-0044310</span><span>GSTIN 32CVDPN2806D1Z3</span></div>
+      <nav class="footer-links" aria-label="Policies">
+        <a href="/terms">Terms &amp; Conditions</a>
+        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="/refund-policy">Refund &amp; Cancellation</a>
+        <a href="/shipping-policy">Shipping Policy</a>
+        <a href="/contact">Contact Us</a>
+      </nav>
+      <img class="footer-logo" src="/assets/logo.png" alt="ANS Foods · Kerala" width="240" height="124" />
+    </div>
+  </footer>
+
+  <div class="overlay" id="cartOverlay" aria-hidden="true">
+    <section class="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+      <div class="cart-head">
+        <h2 id="cartTitle"><span data-en>Your order</span><span data-ml lang="ml">നിങ്ങളുടെ ഓർഡർ</span></h2>
+        <button class="close-btn" type="button" aria-label="Close cart">×</button>
+      </div>
+      <div class="cart-items" id="cartItems"></div>
+      <div class="cart-foot">
+        <div class="total-row"><span><span data-en>Total</span><span data-ml lang="ml">ആകെ</span></span><strong id="cartTotal">₹0</strong></div>
+        <p class="delivery-copy"><span data-en>Shipping charges and delivery time are confirmed after you place the order.</span><span data-ml lang="ml">ഓർഡർ നൽകിയ ശേഷം ഷിപ്പിംഗ് ചാർജും ഡെലിവറി സമയവും സ്ഥിരീകരിക്കും.</span></p>
+        <a class="checkout-btn" id="checkoutBtn" href="/#cart"><span data-en>Proceed to checkout</span><span data-ml lang="ml">ചെക്ക്ഔട്ടിലേക്ക് തുടരുക</span></a>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+
+<script src="/assets/store.js"></script>
+<script>
+(function () {
+  'use strict';
+  var slug = decodeURIComponent((window.location.pathname.split('/')[2] || '').trim());
+  var language = ANS.getLang();
+  ANS.applyLang();
+  var cart = ANS.cart.load();
+  var product = null;
+  var toast = document.querySelector('.toast');
+  var overlay = document.getElementById('cartOverlay');
+  var cartItems = document.getElementById('cartItems');
+  var cartTotal = document.getElementById('cartTotal');
+  var lastFocus = null;
+
+  function t(en, ml) { return language === 'ml' ? ml : en; }
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    window.setTimeout(function () { toast.classList.remove('show'); }, 1800);
+  }
+  // The API returns relative image paths (assets/…); the product page lives
+  // under /products/:slug, so they must be made root-relative.
+  function imgSrc(p) {
+    if (!p) return '';
+    return (/^(https?:)?\/\//.test(p) || p.charAt(0) === '/') ? p : '/' + p;
+  }
+
+  function renderProduct() {
+    if (!product) return;
+    var img = imgSrc(product.image);
+    var el = document.getElementById('detailImage');
+    el.src = img;
+    el.alt = 'ANS Foods ' + t(product.nameEn, product.nameMl);
+    document.getElementById('detailTitle').textContent = t(product.nameEn, product.nameMl);
+    document.getElementById('detailLocal').textContent = t(product.grainEn, product.grainMl);
+    document.getElementById('detailDescription').textContent = t(product.copyEn, product.copyMl);
+    document.getElementById('detailPrice').textContent = ANS.money(product.price);
+    var addBtn = document.getElementById('detailAdd');
+    var stockEl = document.getElementById('detailStock');
+    if (product.stock <= 0) {
+      addBtn.disabled = true;
+      addBtn.textContent = t('Out of stock', 'സ്റ്റോക്കില്ല');
+      stockEl.hidden = false;
+      stockEl.classList.remove('low');
+      stockEl.textContent = t('Sorry, this item is out of stock.', 'ക്ഷമിക്കണം, ഈ ഉൽപ്പന്നം സ്റ്റോക്കില്ല.');
+    } else {
+      addBtn.disabled = false;
+      addBtn.textContent = t('Add to cart', 'കാർട്ടിൽ ചേർക്കുക');
+      if (product.stock <= 5) {
+        stockEl.hidden = false;
+        stockEl.classList.add('low');
+        stockEl.textContent = t('Only ' + product.stock + ' left', 'അവശേഷിക്കുന്നത് ' + product.stock + ' മാത്രം');
+      } else {
+        stockEl.hidden = true;
+      }
+    }
+    var benefits = Array.isArray(product.benefits) ? product.benefits : [];
+    var benefitsEl = document.getElementById('detailBenefits');
+    if (benefits.length) {
+      benefitsEl.hidden = false;
+      document.getElementById('detailBenefitList').innerHTML = benefits.map(function (b, i) {
+        var n = ('0' + (i + 1)).slice(-2);
+        return '<div class="detail-benefit"><span>' + n + '</span><div><strong>' +
+          ANS.esc(t(b.titleEn, b.titleMl)) + '</strong><small>' +
+          ANS.esc(t(b.textEn, b.textMl)) + '</small></div></div>';
+      }).join('');
+    } else {
+      benefitsEl.hidden = true;
+    }
+    document.title = t(product.nameEn, product.nameMl) + ' — ANS Foods';
+    var meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute('content', t(product.shortEn, product.shortMl) || t(product.nameEn, product.nameMl));
+  }
+
+  /* ---------- cart (shared with the home and shop pages) ---------- */
+  function addToCart(id) {
+    var p = ANS.PRODUCTS[id];
+    if (!p) return;
+    if (p.stock <= 0) {
+      showToast(t('Sorry, this item is out of stock.', 'ക്ഷമിക്കണം, ഈ ഉൽപ്പന്നം സ്റ്റോക്കില്ല.'));
+      return;
+    }
+    cart[id] = Math.min(p.stock, (cart[id] || 0) + 1);
+    renderCart();
+    showToast(t('Added to your cart', 'കാർട്ടിൽ ചേർത്തു'));
+  }
+  function renderCart() {
+    ANS.cart.save(cart);
+    var ids = Object.keys(cart).filter(function (id) { return cart[id] > 0 && ANS.PRODUCTS[id]; });
+    document.querySelector('.cart-count').textContent = ANS.cart.count(cart);
+    cartTotal.textContent = ANS.money(ANS.cart.total(cart));
+    if (!ids.length) {
+      cartItems.innerHTML = '<p class="cart-empty">' + t('Your cart is empty.', 'നിങ്ങളുടെ കാർട്ട് ശൂന്യമാണ്.') + '</p>';
+      return;
+    }
+    cartItems.innerHTML = ids.map(function (id) {
+      var p = ANS.PRODUCTS[id];
+      return '<div class="cart-item"><img src="' + imgSrc(p.img) + '" alt="" />' +
+        '<div><h3>' + ANS.esc(t(p.en, p.ml)) + '</h3><p>' + ANS.money(p.price) + ' · 900 g</p>' +
+        '<div class="qty"><button type="button" data-id="' + id + '" data-change="-1" aria-label="Decrease quantity">−</button><span>' + cart[id] + '</span><button type="button" data-id="' + id + '" data-change="1" aria-label="Increase quantity">+</button></div></div>' +
+        '<button class="remove-btn" type="button" data-id="' + id + '" data-remove>' + t('Remove', 'നീക്കുക') + '</button></div>';
+    }).join('');
+  }
+  cartItems.addEventListener('click', function (e) {
+    var id = e.target.getAttribute && e.target.getAttribute('data-id');
+    if (!id) return;
+    if (e.target.hasAttribute('data-change')) {
+      cart[id] = (cart[id] || 0) + Number(e.target.getAttribute('data-change'));
+      if (cart[id] <= 0) delete cart[id];
+      renderCart();
+    } else if (e.target.hasAttribute('data-remove')) {
+      delete cart[id]; renderCart();
+    }
+  });
+  function openCart() {
+    lastFocus = document.activeElement;
+    overlay.classList.add('open'); overlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    overlay.querySelector('.close-btn').focus();
+  }
+  function closeCart() {
+    overlay.classList.remove('open'); overlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (lastFocus) lastFocus.focus();
+  }
+  document.querySelector('.cart-trigger').addEventListener('click', openCart);
+  overlay.querySelector('.close-btn').addEventListener('click', closeCart);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) closeCart(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && overlay.classList.contains('open')) closeCart();
+  });
+  document.getElementById('detailAdd').addEventListener('click', function () {
+    if (product) { addToCart(product.id); openCart(); }
+  });
+
+  /* ---------- language ---------- */
+  document.querySelectorAll('.lang-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      language = ANS.setLang(btn.getAttribute('data-lang'));
+      renderProduct(); renderCart();
+    });
+  });
+
+  /* ---------- init ---------- */
+  renderCart();
+  fetch('/api/products/' + encodeURIComponent(slug))
+    .then(function (res) {
+      if (!res.ok) throw new Error('not found');
+      return res.json();
+    })
+    .then(function (data) {
+      product = data.product;
+      // Register the product in the shared catalog so the cart (which only
+      // knows ANS.PRODUCTS) can price and validate it.
+      ANS.PRODUCTS[product.id] = {
+        id: product.id, en: product.nameEn, ml: product.nameMl,
+        grainEn: product.grainEn, grainMl: product.grainMl,
+        shortEn: product.shortEn, shortMl: product.shortMl,
+        copyEn: product.copyEn, copyMl: product.copyMl,
+        price: product.price, pricePaise: product.pricePaise,
+        stock: product.stock, img: imgSrc(product.image),
+        type: product.type, featured: product.featured,
+        benefits: product.benefits || [],
+      };
+      document.getElementById('productLoading').hidden = true;
+      document.getElementById('productDetail').hidden = false;
+      renderProduct();
+      renderCart();
+    })
+    .catch(function () {
+      document.getElementById('productLoading').hidden = true;
+      document.getElementById('productNotFound').hidden = false;
+      document.title = 'Product not found — ANS Foods';
+    });
+})();
+</script>
+</body>
+</html>
