@@ -7,6 +7,10 @@
   var CART_KEY = 'ans_cart_v1';
   var LANG_KEY = 'ans_lang';
 
+  // Fallback catalog used only until /api/products answers (offline or API
+  // down). Prices and stock are 0 on purpose: the shop must never show a
+  // stale price or sell from a guessed stock level — the live catalog
+  // replaces these within a moment of page load (refreshProducts below).
   var PRODUCTS = {
     barnyard: {
       id: 'barnyard',
@@ -17,7 +21,7 @@
       shortMl: 'ലളിതവും ഹൃദ്യവുമായ രുചിയുള്ള നാടൻ ധാന്യ മിശ്രിതം.',
       copyEn: 'A naturally hearty grain blend with a light, comforting finish—made for a warm and wholesome everyday bowl.',
       copyMl: 'ലളിതവും ഹൃദ്യവുമായ രുചിയോടെ, ദിവസവും ഒരു ഊഷ്മളവും പോഷകസമൃദ്ധവുമായ കഞ്ഞി തയ്യാറാക്കാൻ അനുയോജ്യമായ നാടൻ ധാന്യ മിശ്രിതം.',
-      img: 'assets/ans-barnyard-pro.jpg', price: 600, featured: 1, stock: 100
+      img: 'assets/ans-barnyard-pro.jpg', price: 0, featured: 1, stock: 0
     },
     little: {
       id: 'little',
@@ -28,7 +32,7 @@
       shortMl: 'പരിചിതമായ രുചിയും സംതൃപ്തമായ ഘടനയുമുള്ള ദൈനംദിന മില്ലറ്റ് മിശ്രിതം.',
       copyEn: 'A gentle everyday millet blend with a familiar, satisfying texture—an uncomplicated choice for your breakfast table.',
       copyMl: 'പരിചിതമായ രുചിയും സംതൃപ്തമായ ഘടനയുമുള്ള ദൈനംദിന മില്ലറ്റ് മിശ്രിതം—പ്രഭാതഭക്ഷണത്തിന് ലളിതമായൊരു തിരഞ്ഞെടുപ്പ്.',
-      img: 'assets/ans-little-pro.jpg', price: 600, featured: 2, stock: 100
+      img: 'assets/ans-little-pro.jpg', price: 0, featured: 2, stock: 0
     },
     kodo: {
       id: 'kodo',
@@ -39,7 +43,7 @@
       shortMl: 'ഊഷ്മളവും പോഷകസമൃദ്ധവുമായ കഞ്ഞിക്കായി നാടൻ ധാന്യ മിശ്രിതം.',
       copyEn: 'A robust traditional grain blend for a warm, wholesome bowl with a satisfying, homestyle character.',
       copyMl: 'ഊഷ്മളവും പോഷകസമൃദ്ധവുമായ കഞ്ഞിക്കായി, നാടൻ രുചിയോടെ തയ്യാറാക്കിയ കരുത്തുറ്റ പരമ്പരാഗത ധാന്യ മിശ്രിതം.',
-      img: 'assets/ans-kodo-pro.jpg', price: 600, featured: 3, stock: 100
+      img: 'assets/ans-kodo-pro.jpg', price: 0, featured: 3, stock: 0
     }
   };
 
@@ -116,7 +120,8 @@
             shortEn: p.shortEn || '', shortMl: p.shortMl || '',
             copyEn: p.copyEn || '', copyMl: p.copyMl || '',
             img: p.image || '', price: p.pricePaise / 100,
-            featured: p.featured || 0, stock: p.stock == null ? 0 : p.stock
+            featured: p.featured || 0, stock: p.stock == null ? 0 : p.stock,
+            benefits: Array.isArray(p.benefits) ? p.benefits : []
           };
         });
         Object.keys(PRODUCTS).forEach(function (k) { delete PRODUCTS[k]; });
@@ -140,11 +145,11 @@
       ? '<button class="add-btn" type="button" disabled>' + (ml ? 'സ്റ്റോക്കില്ല' : 'Out of stock') + '</button>'
       : '<button class="add-btn" type="button" data-product="' + esc(p.id) + '">' + (ml ? 'കാർട്ടിൽ ചേർക്കുക' : 'Add to cart') + '</button>';
     return '<article class="product-card">' +
-      '<button class="product-image-link" type="button" data-details="' + esc(p.id) + '" aria-label="' + esc((ml ? 'കാണൂ ' : 'View ') + name) + '">' +
-      '<span class="product-image"><img src="' + esc(p.img) + '" alt="ANS Foods ' + esc(name) + '" loading="lazy" /></span></button>' +
+      '<a class="product-image-link" href="/products/' + esc(p.id) + '" aria-label="' + esc((ml ? 'കാണൂ ' : 'View ') + name) + '">' +
+      '<span class="product-image"><img src="' + esc(p.img) + '" alt="ANS Foods ' + esc(name) + '" loading="lazy" /></span></a>' +
       '<div class="product-body">' +
       '<p class="product-kicker">' + esc(grain) + '</p>' +
-      '<h3 class="product-title"><button class="product-title-link" type="button" data-details="' + esc(p.id) + '">' + esc(name) + '</button></h3>' +
+      '<h3 class="product-title"><a class="product-title-link" href="/products/' + esc(p.id) + '">' + esc(name) + '</a></h3>' +
       (short ? '<p class="product-copy">' + esc(short) + '</p>' : '') +
       '<div class="product-bottom"><div class="price"><strong>' + money(p.price) + '</strong><span>900 g</span></div>' +
       '<div class="product-actions">' + btn + '</div></div>' +

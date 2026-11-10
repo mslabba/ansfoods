@@ -63,6 +63,11 @@
   .modal-card { background:var(--card); border-radius:12px; padding:24px; width:100%; max-width:640px; }
   .modal-card h2 { margin-bottom:4px; }
   .imgprev { width:120px; height:120px; object-fit:cover; border-radius:8px; border:1px solid var(--line); display:block; margin-top:8px; }
+  a.btn-ghost { text-decoration:none; color:var(--ink); display:inline-block; }
+  .benefits-editor { margin-top:6px; }
+  .benefit-row { border:1px solid var(--line); border-radius:8px; padding:4px 14px 14px; margin-bottom:10px; }
+  .benefit-row label { margin:10px 0 4px; }
+  .benefit-row .toolbar { margin-top:10px; }
   .checkrow { display:flex; align-items:center; gap:8px; margin-top:14px; font-size:14px; }
   .checkrow input { width:auto; }
 </style>
@@ -182,7 +187,7 @@
   <div class="modal hidden" id="productModal" aria-hidden="true">
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="pmTitle">
       <h2 id="pmTitle">Add product</h2>
-      <p class="hint" id="pmSub">Fill in the details. The ID is the URL-safe code used in orders.</p>
+      <p class="hint" id="pmSub">Fill in the details. The ID is the URL-safe slug used in orders and in the product page URL (/products/&lt;id&gt;).</p>
       <div class="grid2">
         <div><label for="pf_id">ID (slug) *</label><input id="pf_id" placeholder="foxtail-mix" /></div>
         <div><label for="pf_type">Type (filter group)</label><input id="pf_type" list="typeList" placeholder="barnyard" /><datalist id="typeList"></datalist></div>
@@ -199,10 +204,16 @@
       <input id="pf_short_en" />
       <label for="pf_short_ml">Short description (Malayalam)</label>
       <input id="pf_short_ml" />
-      <label for="pf_copy_en">Full description (English) — shown in quick view</label>
-      <textarea id="pf_copy_en" rows="2"></textarea>
+      <label for="pf_copy_en">Full description (English) — shown on the product page</label>
+      <textarea id="pf_copy_en" rows="5"></textarea>
       <label for="pf_copy_ml">Full description (Malayalam)</label>
-      <textarea id="pf_copy_ml" rows="2"></textarea>
+      <textarea id="pf_copy_ml" rows="5"></textarea>
+      <div class="benefits-editor">
+        <label>Millet wellness benefits — shown on the product page</label>
+        <p class="hint">Each benefit has a title and text in English and Malayalam. Leave a benefit blank to drop it; use ↑ ↓ to reorder. No benefits saved → the section is hidden on the product page.</p>
+        <div id="benefitsList"></div>
+        <button class="btn-ghost" id="benefitsAdd" type="button">+ Add benefit</button>
+      </div>
       <div class="grid2">
         <div><label for="pf_price">Price (₹) *</label><input id="pf_price" type="number" min="0" step="0.01" /></div>
         <div><label for="pf_stock">Stock (units) *</label><input id="pf_stock" type="number" min="0" step="1" /></div>
@@ -244,6 +255,8 @@
     $('loginView').classList.add('hidden');
     $('appView').classList.remove('hidden');
     $('adminEmailLine').textContent = email || '';
+    // Restore the tab from the URL hash (#products etc.); no hash = Orders.
+    showTab(window.location.hash.replace('#', ''), false);
     loadOrders(); loadProducts(); loadSettings();
   }
   function doLogin(){
@@ -263,14 +276,25 @@
   api('/api/admin/me').then(function(r){ if (r.ok) showApp(r.body.email); });
 
   // ---------- tabs ----------
-  document.querySelectorAll('.tab').forEach(function(tab){
-    tab.addEventListener('click', function(){
-      document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
-      tab.classList.add('active');
-      ['orders','products','settings','security'].forEach(function(name){
-        $('tab-'+name).classList.toggle('hidden', name !== tab.getAttribute('data-tab'));
-      });
+  // Hash routing: the tab is in the URL (#orders / #products / #settings /
+  // #security), so a refresh restores the tab and tabs are linkable.
+  var TABS = ['orders', 'products', 'settings', 'security'];
+  function showTab(name, updateHash){
+    if (TABS.indexOf(name) === -1) name = 'orders';
+    document.querySelectorAll('.tab').forEach(function(t){
+      t.classList.toggle('active', t.getAttribute('data-tab') === name);
     });
+    TABS.forEach(function(n){ $('tab-' + n).classList.toggle('hidden', n !== name); });
+    if (updateHash) {
+      var hash = '#' + name;
+      if (window.location.hash !== hash) history.replaceState(null, '', hash);
+    }
+  }
+  document.querySelectorAll('.tab').forEach(function(tab){
+    tab.addEventListener('click', function(){ showTab(tab.getAttribute('data-tab'), true); });
+  });
+  window.addEventListener('hashchange', function(){
+    showTab(window.location.hash.replace('#', ''), false);
   });
 
   // ---------- orders ----------
@@ -377,6 +401,7 @@
           '<button class="stepbtn" data-stock="1" data-id="' + esc(p.id) + '">+</button></span></td>' +
           '<td>' + stockPill(p) + '</td>' +
           '<td style="white-space:nowrap;">' +
+            '<a class="btn-ghost" href="../products/' + esc(p.id) + '" target="_blank" rel="noopener">View</a> ' +
             '<button class="btn-ghost" data-edit="' + esc(p.id) + '">Edit</button> ' +
             (p.active
               ? '<button class="btn-danger-ghost" data-del="' + esc(p.id) + '">Delete</button>'
@@ -434,6 +459,10 @@
     $('pf_short_ml').value = p ? (p.shortMl || '') : '';
     $('pf_copy_en').value = p ? (p.copyEn || '') : '';
     $('pf_copy_ml').value = p ? (p.copyMl || '') : '';
+    benefitsRows = (p && Array.isArray(p.benefits)) ? p.benefits.map(function(b){
+      return { titleEn: b.titleEn || '', titleMl: b.titleMl || '', textEn: b.textEn || '', textMl: b.textMl || '' };
+    }) : [];
+    renderBenefitsEditor();
     $('pf_price').value = p ? (p.pricePaise / 100) : '';
     $('pf_stock').value = p ? p.stock : '0';
     $('pf_featured').value = p ? (p.featured || 0) : '0';
@@ -471,6 +500,54 @@
       })
       .catch(function(){ $('pmErr').textContent = 'Upload failed.'; });
   });
+  // ---------- benefits editor (product modal) ----------
+  var benefitsRows = [];
+  function syncBenefitsFromDom(){
+    benefitsRows = Array.prototype.map.call(document.querySelectorAll('#benefitsList .benefit-row'), function(row){
+      var get = function(f){ var el = row.querySelector('[data-f="' + f + '"]'); return el ? el.value : ''; };
+      return { titleEn: get('titleEn'), titleMl: get('titleMl'), textEn: get('textEn'), textMl: get('textMl') };
+    });
+  }
+  function renderBenefitsEditor(){
+    $('benefitsList').innerHTML = benefitsRows.map(function(b, i){
+      return '<div class="benefit-row">' +
+        '<div class="grid2">' +
+        '<div><label>Title (English)</label><input data-f="titleEn" value="' + esc(b.titleEn || '') + '" /></div>' +
+        '<div><label>Title (Malayalam)</label><input data-f="titleMl" value="' + esc(b.titleMl || '') + '" /></div></div>' +
+        '<div class="grid2">' +
+        '<div><label>Text (English)</label><input data-f="textEn" value="' + esc(b.textEn || '') + '" /></div>' +
+        '<div><label>Text (Malayalam)</label><input data-f="textMl" value="' + esc(b.textMl || '') + '" /></div></div>' +
+        '<div class="toolbar">' +
+        '<button class="btn-ghost" type="button" data-move="-1"' + (i === 0 ? ' disabled' : '') + '>↑ Move up</button>' +
+        '<button class="btn-ghost" type="button" data-move="1"' + (i === benefitsRows.length - 1 ? ' disabled' : '') + '>↓ Move down</button>' +
+        '<button class="btn-danger-ghost" type="button" data-remove>Remove</button></div></div>';
+    }).join('');
+  }
+  function collectBenefits(){
+    syncBenefitsFromDom();
+    return benefitsRows.filter(function(b){
+      return (b.titleEn || b.titleMl || b.textEn || b.textMl);
+    });
+  }
+  $('benefitsList').addEventListener('click', function(e){
+    var btn = e.target.closest('[data-move],[data-remove]');
+    if (!btn) return;
+    syncBenefitsFromDom();
+    var row = btn.closest('.benefit-row');
+    var idx = Array.prototype.indexOf.call(row.parentNode.children, row);
+    if (btn.hasAttribute('data-remove')) { benefitsRows.splice(idx, 1); }
+    else {
+      var to = idx + Number(btn.getAttribute('data-move'));
+      if (to < 0 || to >= benefitsRows.length) return;
+      var tmp = benefitsRows[idx]; benefitsRows[idx] = benefitsRows[to]; benefitsRows[to] = tmp;
+    }
+    renderBenefitsEditor();
+  });
+  $('benefitsAdd').addEventListener('click', function(){
+    syncBenefitsFromDom();
+    benefitsRows.push({ titleEn: '', titleMl: '', textEn: '', textMl: '' });
+    renderBenefitsEditor();
+  });
   $('addProductBtn').addEventListener('click', function(){ openProductModal(null); });
   $('pmCancel').addEventListener('click', closeProductModal);
   $('productModal').addEventListener('click', function(e){ if (e.target === $('productModal')) closeProductModal(); });
@@ -481,6 +558,7 @@
       grain_en: $('pf_grain_en').value, grain_ml: $('pf_grain_ml').value,
       short_en: $('pf_short_en').value, short_ml: $('pf_short_ml').value,
       copy_en: $('pf_copy_en').value, copy_ml: $('pf_copy_ml').value,
+      benefits: collectBenefits(),
       price: $('pf_price').value, stock: $('pf_stock').value,
       type: $('pf_type').value, featured: $('pf_featured').value,
       image: $('pf_image').value, active: $('pf_active').checked
